@@ -48,7 +48,7 @@ var initialPlaces = [{
         lat: 40.7348013,
         lng: -73.99244039999996
     },
-    priceLevel: 3,
+    priceLevel: 5,
     website: "http://www.crumbs.com/",
     show: true
 }, {

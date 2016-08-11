@@ -27,6 +27,10 @@
             <label for="autocomplete-input" class="search__label">Search</label>
             <ul class="autocomplete-content dropdown-content"></ul>
         </div>
+        <div class="input-field col s12 white">
+            <select data-bind="options: sortOptions, optionsText: 'optionDisplay', value: sortedBy, valueUpdate: 'afterKeyDown'"">
+            </select>
+        </div>
         <div class="col s12 accordion">
             <ul class="collapsible z-depth-0" data-collapsible="accordion">
                 <li>

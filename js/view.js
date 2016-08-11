@@ -12,5 +12,8 @@ $(document).ready(function() {
             expanded = !expanded;
         });
     });
+    $(document).ready(function() {
+        $('select').material_select();
+    });
 
 });
