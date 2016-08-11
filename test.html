@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cupcake Map</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Fredoka+One' rel='stylesheet' type='text/css'>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <!--Import custom css-->
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+    body {
+        background: gray;
+    }
+
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 400px;
+        z-index: 1000;
+    }
+
+    .logo {
+        height: 114px;
+        overflow: visible;
+    }
+
+    .logo__title {
+        font-family: 'Fredoka One', cursive;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    img.logo__image {
+        max-width: 80px;
+        display: block;
+    }
+
+    .row .search {
+        margin-top: 0;
+        padding: 40px 18px 12px 12px;
+        z-index: -1;
+    }
+
+    .search__icon {
+        margin-top: 15px;
+    }
+
+    .search__label {
+        margin-top: 40px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="row header">
+        <div class="col s12 logo teal lighten-2">
+            <h4 class="logo__title center-align">Cupcake finder!</h4>
+            <img class="responsive-img logo__image center-elem" src="images/cake.svg">
+        </div>
+        <div class="col s12 search input-field white">
+            <i class="material-icons prefix search__icon">search</i>
+            <input type="text" id="autocomplete-input" class="autocomplete">
+            <label for="autocomplete-input" class="search__label">Search</label>
+            <ul class="autocomplete-content dropdown-content"></ul>
+        </div>
+        <!-- <a class="logo-href center-elem" href="#">
+            <h4 class="logo-title center-align">Cupcake finder!</h4>
+            <img class="responsive-img logo-img center-elem" src="images/cake.svg">
+        </a> -->
+        <!-- <div class="row search-container">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">textsms</i>
+                <input type="text" id="autocomplete-input" class="autocomplete">
+                <label for="autocomplete-input" class="">Autocomplete</label>
+                <ul class="autocomplete-content dropdown-content"></ul>
+            </div>
+        </div> -->
+    </div>
+    <!--Import jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!--Import materialize.js-->
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <!--Import knockout.js-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js'></script>
+    <!--Import custom js -->
+    <script src='js/model.js'></script>
+    <script src='js/view.js'></script>
+    <script src='js/viewModel.js'></script>
+    <script src="js/map.js"></script>
+    <!--Import Google Map API -->
+    <script asyn src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap"></script>
+</body>
+
+</html>
