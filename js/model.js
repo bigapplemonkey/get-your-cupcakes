@@ -7,6 +7,7 @@ var initialPlaceQueries = [
 ];
 
 var initialPlaces = [{
+    id: "billys-bakery-new-york",
     address: "184 9th Ave, New York, NY 10011, United States",
     name: "Billy's Bakery",
     photo: "https://lh4.googleusercontent.com/-_Jzh1pcPmoQ/V6CgnY55KrI/AAAAAAAAAFo/gQFSf9AqQNMgyq45Zug2QknT1slzPXW6QCLIB/w360-h270-k/",
@@ -61,6 +62,6 @@ var initialPlaces = [{
         lng: -74.00498449999998
     },
     priceLevel: 1,
-    website: "http://www.magnoliabakey.com/",
+    website: "http://www.magnoliabakery.com/",
     show: true
 }];

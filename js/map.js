@@ -101,15 +101,17 @@
     }
 
     function createMarker(place) {
+        console.log(place.point)
         var marker = new google.maps.Marker({
             map: map,
             position: place.point,
             title: place.name,
             animation: google.maps.Animation.DROP,
-            photo: place.photo,
+            photo: place.photo ? place.photo : null,
             address: place.address,
-            priceLevel: place.priceLevel,
-            website: place.website
+            priceLevel: place.priceLevel ? place.priceLevel : null,
+            website: place.website,
+            categories: place.categories ? place.categories : null
         });
         addMarkerEvents(marker);
         return marker;

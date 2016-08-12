@@ -41,7 +41,6 @@ var ViewModel = function() {
     self.filteredPlaces = ko.computed(function() {
 
         var sortedBy = self.sortedBy().optionValue;
-        console.log(sortedBy);
         var filter = self.searchString().toLowerCase();
         var places = [];
 
@@ -68,6 +67,53 @@ var ViewModel = function() {
 
         sort(places, sortedBy);
         return places;
+    });
+
+    self.nearPlaces = ko.observableArray([]);
+    ko.computed(function() {
+
+        var url = 'https://api.foursquare.com/v2/venues/search';
+        url += '?' + $.param({
+            'client_id': 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE',
+            'client_secret': 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ',
+            'v': '20130815',
+            'll': '40.7,-74',
+            'categoryId': '4bf58dd8d48988d1bc941735',
+            'limit': 10
+        });
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json'
+        }).done(function(result) {
+            // console.log(result.response.venues);
+            // self.nearPlaces(result.response.venues);
+            var nearPlaces = [];
+            var bounds = new google.maps.LatLngBounds();
+            // console.log(result.response.venues[0].location.lat);
+            result.response.venues.forEach(
+                function(venue) {
+                    isNaN(venue.location)
+                    console.log(isNaN(venue.location.lat))
+                    if (!isNaN(venue.location.lat) || !isNaN(venue.location.lng)) {
+                        var marker = createMarker({
+                            point: { lat: venue.location.lat, lng: venue.location.lng },
+                            name: venue.name,
+                            address: venue.location.address,
+                            website: venue.url
+                        });
+                        self.nearPlaces.push(marker);
+                        bounds.extend(marker.position);
+                    }
+                }
+            );
+            map.fitBounds(bounds);
+
+        }).fail(function(err) {
+            console.log(err);
+        });
+        // return nearPlaces;
     });
 
     self.showElement = function(elem) {

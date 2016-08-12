@@ -54,10 +54,12 @@ main {
 .collapsible-header {
     border: 0;
 }
+
 .card {
     margin: 10px 20px;
     /*height: 300px;*/
 }
+
 
 /************ Header ************/
 
