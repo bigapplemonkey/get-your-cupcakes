@@ -1,77 +1,79 @@
 var ViewModel = function() {
     var self = this;
-    this.locations = [];
-    initialPlaceQueries.forEach(
-        function(place) {
-            self.locations.push(place.query);
-        }
-    );
 
-    self.searchString = ko.observable('');
-    self.places = ko.observableArray([]);
-    self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' }, { optionDisplay: 'Price', optionValue: 'priceLevel' }];
-    self.sortedBy = ko.observable(self.sortOptions[0]);
-    self.previousSort = 'Name';
-
+    /* Methods */
     self.initPlaces = function() {
-        var bounds = new google.maps.LatLngBounds();
         initialPlaces.forEach(
             function(place) {
-                var marker = createMarker(place);
-                self.places.push(marker);
-                bounds.extend(marker.position);
+                self.initMarker(place);
             }
         );
         sort(self.places, 'title');
-        // map.panBy(-250, 0);
     }
 
-    self.showAllPlaces = function() {
-        var bounds = new google.maps.LatLngBounds();
-        self.places().forEach(
-            function(place) {
-                place.setVisible(true)
-                bounds.extend(place.position);
+    self.initMarker = function(place, isNearByPlace) {
+        var marker = createMarker(place, isNearByPlace);
+        marker.isShown = ko.computed(function() {
+            var placeName = place.name;
+            var filter = self.searchString().toLowerCase();
+            var isFavorite = $.inArray(placeName, self.favoriteLocations()) > -1;
+            var complainsWithFilter = filter ? placeName.toLowerCase().indexOf(filter) >= 0 : true
+            var inTab1 = self.isTab1Selected();
+
+            if (complainsWithFilter && isFavorite) {
+                return inTab1 ? true : false
+            } else if (complainsWithFilter && !isFavorite) {
+                return inTab1 ? false : true
             }
-        );
-        map.fitBounds(bounds);
-        // map.panBy(expanded ? 400 : -400, 0);
+            return false;
+        });
+        self.places.push(marker);
     };
 
-    self.filteredPlaces = ko.computed(function() {
+    self.showElement = function(elem) {
+        $(elem).hide().slideDown()
+    };
+    self.hideElement = function(elem) {
+        $(elem).slideUp(function() { $(elem).remove(); })
+    };
 
-        var sortedBy = self.sortedBy().optionValue;
-        var filter = self.searchString().toLowerCase();
-        var places = [];
+    self.testing = function(place) {
+        displayInfobox(place);
+    };
 
-        if (!filter) {
-            self.showAllPlaces();
-            places = self.places();
-        } else {
-            var bounds = new google.maps.LatLngBounds();
-            self.places().forEach(
-                function(place) {
-                    if (place.title.toLowerCase().indexOf(filter) >= 0) {
-                        places.push(place);
-                        place.setVisible(true);
-                        bounds.extend(place.position);
-                    } else place.setVisible(false);
-                }
-            );
+    // self.testing2 = function(place) {
+    //     self.nearPlaces.remove(place);
+    //     self.places.push(place);
+    // }
 
-            if (places.length > 0) {
-                map.fitBounds(bounds);
-                // map.panBy(expanded ? 400 : -400, 0);
-            } else map.setCenter(new google.maps.LatLng(map.center.lat(), map.center.lng()));
-        }
+    /* Static properties */
+    self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' }, { optionDisplay: 'Price', optionValue: 'priceLevel' }];
 
-        sort(places, sortedBy);
-        return places;
+    /* Observables */
+    self.searchString = ko.observable('');
+    self.sortBy = ko.observable(self.sortOptions[0]);
+    self.isTab1Selected = ko.observable(true);
+    self.favoriteLocations = ko.observableArray([]);
+    self.places = ko.observableArray([]);
+
+    /* Computed */
+    self.visiblePlaces = ko.computed(function() {
+        var bounds = new google.maps.LatLngBounds();
+        var filteredArray = ko.utils.arrayFilter(self.places(), function(place) {
+            var isShown = place.isShown();
+            if (isShown) {
+                place.setVisible(true);
+                bounds.extend(place.position);
+            } else place.setVisible(false);
+            return isShown === true;
+        });
+        map.fitBounds(bounds);
+
+        sort(filteredArray, self.sortBy().optionValue);
+        return filteredArray;
     });
 
-    self.nearPlaces = ko.observableArray([]);
     ko.computed(function() {
-
         var url = 'https://api.foursquare.com/v2/venues/search';
         url += '?' + $.param({
             'client_id': 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE',
@@ -87,51 +89,37 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            // console.log(result.response.venues);
-            // self.nearPlaces(result.response.venues);
-            var nearPlaces = [];
-            var bounds = new google.maps.LatLngBounds();
-            // console.log(result.response.venues[0].location.lat);
+            console.log(result.response.venues);
             result.response.venues.forEach(
                 function(venue) {
-                    isNaN(venue.location)
-                    console.log(isNaN(venue.location.lat))
-                    if (!isNaN(venue.location.lat) || !isNaN(venue.location.lng)) {
-                        var marker = createMarker({
-                            point: { lat: venue.location.lat, lng: venue.location.lng },
-                            name: venue.name,
-                            address: venue.location.address,
-                            website: venue.url
-                        });
-                        self.nearPlaces.push(marker);
-                        bounds.extend(marker.position);
-                    }
+                    self.initMarker({
+                        point: { lat: venue.location.lat, lng: venue.location.lng },
+                        name: venue.name,
+                        address: venue.location.address,
+                        website: venue.url,
+                        categories: venue.categories
+                    }, true);
+
                 }
             );
-            map.fitBounds(bounds);
 
         }).fail(function(err) {
             console.log(err);
         });
-        // return nearPlaces;
     });
 
-    self.showElement = function(elem) {
-        $(elem).hide().slideDown()
-    }
-    self.hideElement = function(elem) {
-        $(elem).slideUp(function() { $(elem).remove(); })
-    }
-
-    self.testing = function(place) {
-        displayInfobox(place);
-    }
+    /* Favorite locations init */
+    initialPlaces.forEach(
+        function(place) {
+            self.favoriteLocations.push(place.name);
+        }
+    );
 };
 
 //helpers
 
-function sort(observableArray, sortBy) {
-    observableArray.sort(function(l, r) {
+function sort(array, sortBy) {
+    array.sort(function(l, r) {
         return l[sortBy] > r[sortBy] ? 1 : -1
     })
 }
@@ -149,6 +137,9 @@ function whenAvailable(name, callback) {
 
 whenAvailable("map", function() {
     var viewModel = new ViewModel();
+    window.viewModel = viewModel;
     viewModel.initPlaces();
     ko.applyBindings(viewModel);
+    view.init(viewModel);
+    // viewModel.filteredPlaces()[0].visible = false;
 });

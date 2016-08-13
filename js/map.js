@@ -3,7 +3,6 @@
 
 (function() {
     var map,
-        testing = [],
         largeInfowindow,
         defaultIcon, highlightedIcon;
 
@@ -25,38 +24,10 @@
         defaultIcon = makeMarkerIcon('0091ff');
         highlightedIcon = makeMarkerIcon('FFFF24');
 
-        window.pinPoster = pinPoster;
         window.createMarker = createMarker;
         window.closeInfoWindow = closeInfoWindow;
         window.displayInfobox = displayInfobox;
         window.map = map;
-        // pinPoster(viewModel.locations);
-        // console.log(testing);
-    }
-
-    function initMap2() {
-        var styles = [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#7562ab" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": "17" }, { "saturation": "-48" }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#4c3775" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#513b90" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#211b34" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#0f252e" }, { "lightness": 17 }] }];
-        var styledMap = new google.maps.StyledMapType(styles, { name: "Styled Map" });
-
-        map = new google.maps.Map($('#map')[0], {
-            center: { lat: 40.7413549, lng: -73.9980244 },
-            zoom: 13,
-            styles: styles
-        });
-
-        var home = { lat: 40.721901, lng: -74.047103 };
-
-        var marker = new google.maps.Marker({
-            position: home,
-            map: map,
-            title: 'here I am!'
-        });
-        var infoBox = new google.maps.InfoWindow({
-            content: 'Hello people!'
-        });
-        marker.addListener('click', function() {
-            infoBox.open(map, marker);
-        });
     }
 
     function pinPoster(locations) {
@@ -82,7 +53,6 @@
                 priceLevel: results[0].price_level,
                 point: { lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng() }
             });
-            console.log(results);
             var request = {
                 placeId: results[0].place_id
             };
@@ -100,9 +70,8 @@
         else console.log("Error!");
     }
 
-    function createMarker(place) {
-        console.log(place.point)
-        var marker = new google.maps.Marker({
+    function createMarker(place, isNearByPlace) {
+        var markerConfig = {
             map: map,
             position: place.point,
             title: place.name,
@@ -112,7 +81,9 @@
             priceLevel: place.priceLevel ? place.priceLevel : null,
             website: place.website,
             categories: place.categories ? place.categories : null
-        });
+        };
+        if (isNearByPlace) markerConfig.icon = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+        var marker = new google.maps.Marker(markerConfig);
         addMarkerEvents(marker);
         return marker;
     }

@@ -28,7 +28,7 @@
             <ul class="autocomplete-content dropdown-content"></ul>
         </div>
         <div class="input-field col s12 white">
-            <select data-bind="options: sortOptions, optionsText: 'optionDisplay', value: sortedBy, valueUpdate: 'afterKeyDown'"">
+            <select data-bind="options: sortOptions, optionsText: 'optionDisplay', value: sortBy, valueUpdate: 'afterKeyDown'"">
             </select>
         </div>
         <div class="col s12 accordion">
@@ -45,7 +45,7 @@
                       </ul>
                     </div>
                     <div id="test1" class="col s12">
-                        <ul data-bind="template: { foreach: filteredPlaces,
+                        <ul data-bind="template: { foreach: visiblePlaces,
                                     beforeRemove: hideElement,
                                     afterAdd: showElement }">
                             <li>
@@ -66,17 +66,17 @@
                         </ul>
                     </div>
                     <div id="test2" class="col s12">
-                        <ul class="collection" data-bind="foreach: nearPlaces">
+                        <ul class="collection" data-bind="foreach: visiblePlaces">
                             <li class="collection-item avatar" data-bind="event: { mouseover: $parent.testing}">
                               <img src="http://placehold.it/350x150" alt="" class="circle">
-                              <span class="title">Title</span>
-                              <p><span data-bind="text: title"></span><br>
+                              <span class="title" data-bind="text: title"></span>
+                              <p><span data-bind="text: address"></span><br>
                                  <!-- Second Line -->
                                  <a href="" data-bind="if: website, attr: {href: website}">This is a link</a>
                                  <div data-bind="foreach: categories">
                                      <div class="chip">
                                         <span data-bind="text: name"></span>
-                                        <i class="close material-icons">close</i>
+                                        <!-- <i class="close material-icons">close</i> -->
                                       </div>
                                  </div>
                               </p>
