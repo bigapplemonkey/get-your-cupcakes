@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,118 +12,85 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
     <!--Import custom css-->
     <link rel="stylesheet" href="css/styles.css">
-</head>
-
-<body>
+  </head>
+  <body>
     <div class="row navigation z-depth-2">
-        <div class="col s12 logo teal lighten-2">
-            <img class="responsive-img logo__image center-elem" src="images/cake.svg">
-            <h4 class="logo__title center-align">Cupcake finder!</h4>
-        </div>
-        <div class="col s12 search input-field white">
-            <i class="material-icons prefix search__icon">search</i>
-            <input type="text" id="autocomplete-input" class="autocomplete" data-bind="value: searchString, valueUpdate: 'keyup'">
-            <label for="autocomplete-input" class="search__label">Search</label>
-            <ul class="autocomplete-content dropdown-content"></ul>
-        </div>
-        <div class="input-field col s12 white">
-            <select data-bind="options: sortOptions, optionsText: 'optionDisplay', value: sortBy, valueUpdate: 'afterKeyDown'"">
-            </select>
-        </div>
-        <div class="col s12 accordion">
-            <ul class="collapsible z-depth-0" data-collapsible="accordion">
-                <li>
-                    <div id="collapsible-header" class="collapsible-header active">
-                        <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
+      <div class="col s12 logo teal lighten-2">
+        <img class="responsive-img logo__image center-elem" src="images/cake.svg">
+        <h4 class="logo__title center-align">Cupcake finder!</h4>
+      </div>
+      <div class="col s12 search input-field white">
+        <i class="material-icons prefix search__icon">search</i>
+        <input type="text" id="autocomplete-input" class="autocomplete" data-bind="value: searchString, valueUpdate: 'keyup'">
+        <label for="autocomplete-input" class="search__label">Search</label>
+        <ul class="autocomplete-content dropdown-content"></ul>
+      </div>
+      <div class="input-field col s12 white">
+        <select data-bind="options: sortOptions, optionsText: 'optionDisplay', value: sortBy, valueUpdate: 'afterKeyDown'"">
+        </select>
+      </div>
+      <div class="col s12 accordion">
+        <ul class="collapsible z-depth-0" data-collapsible="accordion">
+          <li>
+            <div id="collapsible-header" class="collapsible-header active">
+              <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
+            </div>
+            <div class="collapsible-body grey lighten-5">
+              <div class="col s12">
+                <ul class="tabs">
+                  <li class="tab col s3"><a class="active" href="#test1">Test 1</a></li>
+                  <li class="tab col s3"><a href="#test2">Test 2</a></li>
+                </ul>
+              </div>
+              <div id="test1" class="col s12">
+                <ul data-bind="template: { foreach: visiblePlaces,
+                  beforeRemove: hideElement,
+                  afterAdd: showElement }">
+                  <li>
+                    <div class="card small" data-bind="event: { mouseover: $parent.highlight}">
+                      <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" src="" data-bind="attr: {src: photo}">
+                      </div>
+                      <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4" data-bind="html: title + '<i class=&quot;material-icons right&quot;>more_vert</i>'"></span>
+                        <a href="#!" class="secondary-content" data-bind="click: $parent.removeFromFavorites"><i class="material-icons">grade</i></a>
+                        <p><a href="" data-bind="attr: {href: website}">This is a link</a></p>
+                      </div>
+                      <div class="card-reveal">
+                        <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                        <p data-bind="text: address"></p>
+                      </div>
                     </div>
-                    <div class="collapsible-body grey lighten-5">
-                    <div class="col s12">
-                      <ul class="tabs">
-                        <li class="tab col s3"><a class="active" href="#test1">Test 1</a></li>
-                        <li class="tab col s3"><a href="#test2">Test 2</a></li>
-                      </ul>
+                  </li>
+                </ul>
+              </div>
+              <div id="test2" class="col s12">
+                <ul class="collection" data-bind="foreach: visiblePlaces">
+                  <li class="collection-item avatar" data-bind="event: { mouseover: $parent.highlight}">
+                    <img src="http://placehold.it/350x150" alt="" class="circle">
+                    <span class="title" data-bind="text: title"></span>
+                    <p>
+                      <span data-bind="text: address"></span><br>
+                      <!-- Second Line -->
+                      <a href="" data-bind="if: website, attr: {href: website}">This is a link</a>
+                    <div data-bind="foreach: categories">
+                      <div class="chip">
+                        <span data-bind="text: name"></span>
+                        <!-- <i class="close material-icons">close</i> -->
+                      </div>
                     </div>
-                    <div id="test1" class="col s12">
-                        <ul data-bind="template: { foreach: visiblePlaces,
-                                    beforeRemove: hideElement,
-                                    afterAdd: showElement }">
-                            <li>
-                                <div class="card small" data-bind="event: { mouseover: $parent.testing}">
-                                    <div class="card-image waves-effect waves-block waves-light">
-                                        <img class="activator" src="" data-bind="attr: {src: photo}">
-                                    </div>
-                                    <div class="card-content">
-                                        <span class="card-title activator grey-text text-darken-4" data-bind="html: title + '<i class=&quot;material-icons right&quot;>more_vert</i>'"></span>
-                                        <p><a href="" data-bind="attr: {href: website}">This is a link</a></p>
-                                    </div>
-                                    <div class="card-reveal">
-                                        <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-                                        <p data-bind="text: address"></p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="test2" class="col s12">
-                        <ul class="collection" data-bind="foreach: visiblePlaces">
-                            <li class="collection-item avatar" data-bind="event: { mouseover: $parent.testing}">
-                              <img src="http://placehold.it/350x150" alt="" class="circle">
-                              <span class="title" data-bind="text: title"></span>
-                              <p><span data-bind="text: address"></span><br>
-                                 <!-- Second Line -->
-                                 <a href="" data-bind="if: website, attr: {href: website}">This is a link</a>
-                                 <div data-bind="foreach: categories">
-                                     <div class="chip">
-                                        <span data-bind="text: name"></span>
-                                        <!-- <i class="close material-icons">close</i> -->
-                                      </div>
-                                 </div>
-                              </p>
-                              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                            </li>
-                        </ul>
-                    </div>
-                       <!-- <ul class="collection">
-                            <li class="collection-item avatar">
-                                <img src="http://placekitten.com/100/50" alt="" class="circle">
-                                <span class="title">Title</span>
-                                <p>First Line
-                                    <br> Second Line
-                                </p>
-                                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                            </li>
-                            <li class="collection-item avatar">
-                                <i class="material-icons circle">folder</i>
-                                <span class="title">Title</span>
-                                <p>First Line
-                                    <br> Second Line
-                                </p>
-                                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                            </li>
-                            <li class="collection-item avatar">
-                                <i class="material-icons circle green">insert_chart</i>
-                                <span class="title">Title</span>
-                                <p>First Line
-                                    <br> Second Line
-                                </p>
-                                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                            </li>
-                            <li class="collection-item avatar">
-                                <i class="material-icons circle red">play_arrow</i>
-                                <span class="title">Title</span>
-                                <p>First Line
-                                    <br> Second Line
-                                </p>
-                                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                            </li>
-                        </ul> -->
-                    </div>
-                </li>
-            </ul>
-        </div>
+                    </p>
+                    <a href="#!" class="secondary-content" data-bind="click: $parent.addToFavorites"><i class="material-icons">grade</i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <main>
-        <div id="map"></div>
+      <div id="map"></div>
     </main>
     <!--Import jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -139,6 +105,5 @@
     <script src="js/map.js"></script>
     <!--Import Google Map API -->
     <script asyn src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap"></script>
-</body>
-
+  </body>
 </html>

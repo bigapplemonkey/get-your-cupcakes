@@ -3,7 +3,7 @@ var ViewModel = function() {
 
     /* Methods */
     self.initPlaces = function() {
-        initialPlaces.forEach(
+        model.initialPlaces.forEach(
             function(place) {
                 self.initMarker(place);
             }
@@ -11,12 +11,22 @@ var ViewModel = function() {
         sort(self.places, 'title');
     }
 
+    self.getInitialPlacesIDs = function() {
+        var placeIDs = [];
+        model.initialPlaces.forEach(
+            function(place) {
+                placeIDs.push(place.placeID);
+            });
+        return placeIDs;
+    };
+
     self.initMarker = function(place, isNearByPlace) {
         var marker = createMarker(place, isNearByPlace);
+        // Extending marker properties
         marker.isShown = ko.computed(function() {
-            var placeName = place.name;
+            var placeID = place.placeID;
             var filter = self.searchString().toLowerCase();
-            var isFavorite = $.inArray(placeName, self.favoriteLocations()) > -1;
+            var isFavorite = $.inArray(placeID, self.favoriteLocations()) > -1;
             var complainsWithFilter = filter ? placeName.toLowerCase().indexOf(filter) >= 0 : true
             var inTab1 = self.isTab1Selected();
 
@@ -27,6 +37,12 @@ var ViewModel = function() {
             }
             return false;
         });
+        marker.photo = place.photo ? place.photo : null;
+        marker.address = place.address;
+        marker.priceLevel = place.priceLevel ? place.priceLevel : null;
+        marker.website = place.website;
+        marker.categories = place.categories ? place.categories : null;
+        marker.placeID = place.placeID;
         self.places.push(marker);
     };
 
@@ -37,14 +53,19 @@ var ViewModel = function() {
         $(elem).slideUp(function() { $(elem).remove(); })
     };
 
-    self.testing = function(place) {
+    self.highlight = function(place) {
         displayInfobox(place);
     };
 
-    // self.testing2 = function(place) {
-    //     self.nearPlaces.remove(place);
-    //     self.places.push(place);
-    // }
+    self.addToFavorites = function(place) {
+        self.favoriteLocations.push(place.placeID);
+        switchIcon(place, true);
+    }
+
+    self.removeFromFavorites = function(place) {
+        self.favoriteLocations.remove(place.placeID);
+        switchIcon(place);
+    }
 
     /* Static properties */
     self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' }, { optionDisplay: 'Price', optionValue: 'priceLevel' }];
@@ -58,6 +79,7 @@ var ViewModel = function() {
 
     /* Computed */
     self.visiblePlaces = ko.computed(function() {
+        closeInfoWindow();
         var bounds = new google.maps.LatLngBounds();
         var filteredArray = ko.utils.arrayFilter(self.places(), function(place) {
             var isShown = place.isShown();
@@ -70,18 +92,20 @@ var ViewModel = function() {
         map.fitBounds(bounds);
 
         sort(filteredArray, self.sortBy().optionValue);
+        if (filteredArray.length < 1) centerMap();
         return filteredArray;
     });
 
     ko.computed(function() {
+        console.log('here!!!!');
+        var placeIDs = self.getInitialPlacesIDs();
         var url = 'https://api.foursquare.com/v2/venues/search';
         url += '?' + $.param({
             'client_id': 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE',
             'client_secret': 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ',
             'v': '20130815',
             'll': '40.7,-74',
-            'categoryId': '4bf58dd8d48988d1bc941735',
-            'limit': 10
+            'categoryId': '4bf58dd8d48988d1bc941735'
         });
 
         $.ajax({
@@ -89,17 +113,18 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            console.log(result.response.venues);
             result.response.venues.forEach(
                 function(venue) {
-                    self.initMarker({
-                        point: { lat: venue.location.lat, lng: venue.location.lng },
-                        name: venue.name,
-                        address: venue.location.address,
-                        website: venue.url,
-                        categories: venue.categories
-                    }, true);
-
+                    if (!placeIDs.includes(venue.id)) {
+                        self.initMarker({
+                            placeID: venue.id,
+                            point: { lat: venue.location.lat, lng: venue.location.lng },
+                            name: venue.name,
+                            address: venue.location.address,
+                            website: venue.url,
+                            categories: venue.categories
+                        }, true);
+                    }
                 }
             );
 
@@ -109,9 +134,9 @@ var ViewModel = function() {
     });
 
     /* Favorite locations init */
-    initialPlaces.forEach(
+    self.getInitialPlacesIDs().forEach(
         function(place) {
-            self.favoriteLocations.push(place.name);
+            self.favoriteLocations.push(place);
         }
     );
 };
@@ -139,7 +164,6 @@ whenAvailable("map", function() {
     var viewModel = new ViewModel();
     window.viewModel = viewModel;
     viewModel.initPlaces();
+    view.init();
     ko.applyBindings(viewModel);
-    view.init(viewModel);
-    // viewModel.filteredPlaces()[0].visible = false;
 });

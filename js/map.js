@@ -9,8 +9,9 @@
     function initMap() {
         var styles = [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#7562ab" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": "17" }, { "saturation": "-48" }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#4c3775" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#513b90" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#211b34" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#0f252e" }, { "lightness": 17 }] }];
         var styledMap = new google.maps.StyledMapType(styles, { name: "Styled Map" });
+        var center = { lat: 40.7413549, lng: -73.9980244 };
         map = new google.maps.Map($('#map')[0], {
-            center: { lat: 40.7413549, lng: -73.9980244 },
+            center: center,
             maxZoom: 15,
             // mapTypeControl: false
             mapTypeControlOptions: {
@@ -27,6 +28,11 @@
         window.createMarker = createMarker;
         window.closeInfoWindow = closeInfoWindow;
         window.displayInfobox = displayInfobox;
+        window.switchIcon = switchIcon;
+        window.centerMap = function() {
+            map.setCenter(center)
+            map.setZoom(13);
+        };
         window.map = map;
     }
 
@@ -75,15 +81,13 @@
             map: map,
             position: place.point,
             title: place.name,
-            animation: google.maps.Animation.DROP,
-            photo: place.photo ? place.photo : null,
-            address: place.address,
-            priceLevel: place.priceLevel ? place.priceLevel : null,
-            website: place.website,
-            categories: place.categories ? place.categories : null
+            animation: google.maps.Animation.DROP
         };
-        if (isNearByPlace) markerConfig.icon = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
         var marker = new google.maps.Marker(markerConfig);
+
+        if(isNearByPlace) marker.setIcon(highlightedIcon);
+        else marker.setIcon(defaultIcon);
+
         addMarkerEvents(marker);
         return marker;
     }
@@ -132,7 +136,12 @@
 
     function displayInfobox(marker) {
         populateInfoWindow(marker, largeInfowindow);
-        map.panTo(marker.getPosition()); // setCenter takes a LatLng object
+        map.panTo(marker.getPosition());
+    }
+
+    function switchIcon(marker, isDefault) {
+        if(isDefault)  marker.setIcon(defaultIcon);
+        else  marker.setIcon(highlightedIcon);
     }
 
     window.initMap = initMap;
