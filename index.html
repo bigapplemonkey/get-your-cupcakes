@@ -48,8 +48,10 @@
                   afterAdd: showElement }">
                   <li>
                     <div class="card small" data-bind="event: { mouseover: $parent.highlight}">
-                      <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src="" data-bind="attr: {src: photo}">
+                      <div class="card-image waves-effect waves-block waves-light" data-bind="click: $parent.testing">
+                        <!-- ko if: photos -->
+                          <img class="activator" src="" data-bind="attr: {src: photos()[0]}">
+                        <!-- /ko -->
                       </div>
                       <div class="card-content">
                         <span class="card-title activator grey-text text-darken-4" data-bind="html: title + '<i class=&quot;material-icons right&quot;>more_vert</i>'"></span>
@@ -58,6 +60,24 @@
                       </div>
                       <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                        <!-- ko if: photos -->
+                         <div class="carousel" data-bind="foreach: photos()">
+                          <a class="carousel-item" href="#one!"><img src="" data-bind="attr: {src: $data}"></a>
+                        </div>
+                       <!--  <div class="carousel">
+                          <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/Z6KsXjbq4TkqFLVpf-p9PgH1kfUogdvgVX4i9XlKYUM.jpg" data-bind="attr: {src: $data}"></a>
+
+                          <a class="carousel-item" href="#one!"><img src="https://irs0.4sqi.net/img/general/300x300/16999799_m95aJqqmg9GSnsc8glzGyM6xoDWvQbdJediK4Jwlw84.jpg"></a>
+
+                          <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/fEV3dv0Qa2IDz53tBw6NHQI4rkyAhE0c585UF3NaOBc.jpg"></a>
+
+                          <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/3648652_9TvpSI847hWccGq7NvZ8ymna77BzKm0efNNcpgYYMX0.jpg"></a>
+
+                          <a class="carousel-item" href="#one!"><img src="https://irs0.4sqi.net/img/general/300x300/1794728_d6gl7Q63KlPsUElFhw8ugX_eDgG14MNflHIdvWEw7Og.jpg"></a>
+
+                          <a class="carousel-item" href="#one!"><img src="https://irs2.4sqi.net/img/general/300x300/30823609_KYa9rLIFl7IM34HuXhg1gy71Okp_Vxcbs9SEjjKpduM.jpg"></a>
+                        </div> -->
+                        <!-- /ko -->
                         <p data-bind="text: address"></p>
                       </div>
                     </div>

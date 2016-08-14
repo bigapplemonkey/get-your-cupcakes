@@ -38,13 +38,39 @@ var ViewModel = function() {
             }
             return false;
         });
-        marker.photo = place.photo ? place.photo : null;
         marker.address = place.address;
         marker.priceLevel = place.priceLevel ? place.priceLevel : null;
         marker.website = place.website;
         marker.categories = place.categories ? place.categories : null;
         marker.placeID = place.placeID;
+        marker.photos = ko.observableArray([]);
+
+        self.retrievePhotos(marker);
         self.places.push(marker);
+    };
+
+    self.retrievePhotos = function(place) {
+        var photosURL = 'https://api.foursquare.com/v2/venues/' + place.placeID + '/photos';
+        photosURL += '?' + $.param({
+            'client_id': self.clientID,
+            'client_secret': self.clientSecret,
+            'v': self.version,
+            'limit': 6
+        });
+        // console.log(photosURL);
+        $.ajax({
+            url: photosURL,
+            method: 'GET',
+            dataType: 'json'
+        }).done(function(result) {
+            result.response.photos.items.forEach(
+                function(photo) {
+                    place.photos.push(photo.prefix + '200x200' + photo.suffix);
+                }
+            );
+        }).fail(function(err) {
+            console.log(err);
+        });
     };
 
     self.showElement = function(elem) {
@@ -77,7 +103,7 @@ var ViewModel = function() {
             placeID: place.placeID,
             address: place.address,
             name: place.title,
-            photo: place.photo ? place.photo : null,
+            photos: place.photos,
             point: {
                 lat: place.getPosition().lat(),
                 lng: place.getPosition().lng()
@@ -96,8 +122,19 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
+    self.testing = function() {
+        $('.carousel').carousel({
+            dist: 0,
+            shift: 0,
+            padding: 20
+        });
+    };
+
     /* Static properties */
     self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' }, { optionDisplay: 'Price', optionValue: 'priceLevel' }];
+    self.clientID = 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE';
+    self.clientSecret = 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ';
+    self.version = '20130815';
 
     /* Observables */
     self.searchString = ko.observable('');
@@ -127,23 +164,25 @@ var ViewModel = function() {
 
     ko.computed(function() {
         console.log('here!!!!');
+
         var placeIDs = self.getInitialPlacesIDs();
-        var url = 'https://api.foursquare.com/v2/venues/search';
-        url += '?' + $.param({
-            'client_id': 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE',
-            'client_secret': 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ',
-            'v': '20130815',
+        var venueURL = 'https://api.foursquare.com/v2/venues/search';
+        venueURL += '?' + $.param({
+            'client_id': self.clientID,
+            'client_secret': self.clientSecret,
+            'v': self.version,
             'll': '40.7,-74',
             'categoryId': '4bf58dd8d48988d1bc941735'
         });
 
         $.ajax({
-            url: url,
+            url: venueURL,
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
             result.response.venues.forEach(
                 function(venue) {
+                    // console.log(venue);
                     if (!placeIDs.includes(venue.id)) {
                         self.initMarker({
                             placeID: venue.id,
