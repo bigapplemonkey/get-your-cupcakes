@@ -25,6 +25,7 @@ var ViewModel = function() {
         // Extending marker properties
         marker.isShown = ko.computed(function() {
             var placeID = place.placeID;
+            var placeName = place.name;
             var filter = self.searchString().toLowerCase();
             var isFavorite = $.inArray(placeID, self.favoriteLocations()) > -1;
             var complainsWithFilter = filter ? placeName.toLowerCase().indexOf(filter) >= 0 : true
@@ -59,13 +60,41 @@ var ViewModel = function() {
 
     self.addToFavorites = function(place) {
         self.favoriteLocations.push(place.placeID);
+        self.savePlace(place);
         switchIcon(place, true);
+        view.updateFavoriteCounter(place.title);
     }
 
     self.removeFromFavorites = function(place) {
         self.favoriteLocations.remove(place.placeID);
+        self.removePlace(place.placeID);
         switchIcon(place);
+        view.updateNearCounter(place.title);
     }
+
+    self.savePlace = function(place) {
+        var newPlace = {
+            placeID: place.placeID,
+            address: place.address,
+            name: place.title,
+            photo: place.photo ? place.photo : null,
+            point: {
+                lat: place.getPosition().lat(),
+                lng: place.getPosition().lng()
+            },
+            priceLevel: place.priceLevel ? place.priceLevel : null,
+            website: place.website ? place.website : null
+        };
+        model.initialPlaces.push(newPlace);
+        localStorage.favoritePlaces = JSON.stringify(model);
+    };
+
+    self.removePlace = function(placeID) {
+        model.initialPlaces = $.grep(model.initialPlaces, function(place) {
+            return place.placeID.localeCompare(placeID) !== 0;
+        });
+        localStorage.favoritePlaces = JSON.stringify(model);
+    };
 
     /* Static properties */
     self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' }, { optionDisplay: 'Price', optionValue: 'priceLevel' }];

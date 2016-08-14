@@ -1,6 +1,9 @@
 var view = {
     init: function() {
+        var self = this;
         $(document).ready(function() {
+            self.favoriteCountElem = $('#favoriteCount');
+            self.nearCountElem = $('#nearCount');
             $('.collapsible').collapsible({
                 accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
@@ -22,12 +25,25 @@ var view = {
                     var selectedTab = elem[0].id;
                     viewModel.searchString('');
                     $('input').blur();
-                    if (selectedTab === 'test1') viewModel.isTab1Selected(true);
-                    else viewModel.isTab1Selected(false);
+                    if (selectedTab === 'test1') {
+                        viewModel.isTab1Selected(true);
+                        self.favoriteCountElem.removeClass('light-green lighten-1');
+                    } else {
+                        viewModel.isTab1Selected(false);
+                        self.nearCountElem.removeClass('yellow lighten-3');
+                    }
 
                 }
             });
 
         });
+    },
+    updateFavoriteCounter: function(placeName) {
+        this.favoriteCountElem.addClass('light-green lighten-1');
+        Materialize.toast(placeName + ' added to favorites!', 1500, 'rounded');
+    },
+    updateNearCounter: function(placeName) {
+        this.nearCountElem.addClass('yellow lighten-3');
+        Materialize.toast(placeName + ' removed from favorites!', 1500, 'rounded');
     }
 }
