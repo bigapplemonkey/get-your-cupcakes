@@ -38,6 +38,16 @@ var view = {
 
         });
     },
+
+    initCarousel: function() {
+        $(document).ready(function() {
+            $('.carousel').carousel({
+                dist: 0,
+                shift: 0,
+                padding: 20
+            });
+        });
+    },
     updateFavoriteCounter: function(placeName) {
         this.favoriteCountElem.addClass('light-green lighten-1');
         Materialize.toast(placeName + ' added to favorites!', 1500, 'rounded');

@@ -47,8 +47,8 @@
                   beforeRemove: hideElement,
                   afterAdd: showElement }">
                   <li>
-                    <div class="card small" data-bind="event: { mouseover: $parent.highlight}">
-                      <div class="card-image waves-effect waves-block waves-light" data-bind="click: $parent.testing">
+                    <div class="card" data-bind="event: { mouseover: $parent.highlight}">
+                      <div class="card-image waves-effect waves-block waves-light" data-bind="click: $parent.initGalleries">
                         <!-- ko if: photos -->
                           <img class="activator" src="" data-bind="attr: {src: photos()[0]}">
                         <!-- /ko -->
@@ -61,8 +61,8 @@
                       <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
                         <!-- ko if: photos -->
-                         <div class="carousel" data-bind="foreach: photos()">
-                          <a class="carousel-item" href="#one!"><img src="" data-bind="attr: {src: $data}"></a>
+                         <div class="carousel" data-bind="foreach: photos(), attr: { id: placeID }">
+                          <a class="carousel-item" href="#"><img src="" data-bind="attr: {src: $data}"></a>
                         </div>
                        <!--  <div class="carousel">
                           <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/Z6KsXjbq4TkqFLVpf-p9PgH1kfUogdvgVX4i9XlKYUM.jpg" data-bind="attr: {src: $data}"></a>

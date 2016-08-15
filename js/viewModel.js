@@ -65,9 +65,10 @@ var ViewModel = function() {
         }).done(function(result) {
             result.response.photos.items.forEach(
                 function(photo) {
-                    place.photos.push(photo.prefix + '200x200' + photo.suffix);
+                    place.photos.push(photo.prefix + '300x300' + photo.suffix);
                 }
             );
+            // view.initCarousel(place.placeID);
         }).fail(function(err) {
             console.log(err);
         });
@@ -122,12 +123,8 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
-    self.testing = function() {
-        $('.carousel').carousel({
-            dist: 0,
-            shift: 0,
-            padding: 20
-        });
+    self.initGalleries = function() {
+        view.initCarousel();
     };
 
     /* Static properties */
