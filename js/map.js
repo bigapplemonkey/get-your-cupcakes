@@ -13,10 +13,11 @@
         map = new google.maps.Map($('#map')[0], {
             center: center,
             maxZoom: 15,
-            // mapTypeControl: false
-            mapTypeControlOptions: {
-                mapTypeIds: ['roadmap', 'map_style']
-            }
+            minZoom: 9,
+            mapTypeControl: false
+            // mapTypeControlOptions: {
+            //     mapTypeIds: ['roadmap', 'map_style']
+            // }
         });
         map.mapTypes.set('map_style', styledMap);
 

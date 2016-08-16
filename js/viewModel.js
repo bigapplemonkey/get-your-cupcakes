@@ -50,20 +50,20 @@ var ViewModel = function() {
     };
 
     self.retrievePhotos = function(place) {
-        var photosURL = 'https://api.foursquare.com/v2/venues/' + place.placeID + '/photos';
-        photosURL += '?' + $.param({
+        var detailsURL = 'https://api.foursquare.com/v2/venues/' + place.placeID;
+        detailsURL += '?' + $.param({
             'client_id': self.clientID,
             'client_secret': self.clientSecret,
-            'v': self.version,
-            'limit': 6
+            'v': self.version
         });
-        // console.log(photosURL);
+
         $.ajax({
-            url: photosURL,
+            url: detailsURL,
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            result.response.photos.items.forEach(
+            // console.log(result.response.venue.photos.groups[0].items.length);
+            result.response.venue.photos.groups[0].items.forEach(
                 function(photo) {
                     place.photos.push(photo.prefix + '300x300' + photo.suffix);
                 }
@@ -72,6 +72,10 @@ var ViewModel = function() {
         }).fail(function(err) {
             console.log(err);
         });
+    };
+
+    self.sortPlacesBy = function(index) {
+       self.sortBy(self.sortOptions[index]);
     };
 
     self.showElement = function(elem) {

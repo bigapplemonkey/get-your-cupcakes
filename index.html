@@ -14,20 +14,20 @@
     <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-    <div class="row navigation z-depth-2">
-      <div class="col s12 logo teal lighten-2">
-        <img class="responsive-img logo__image center-elem" src="images/cake.svg">
+    <div class="row navigation z-depth-1">
+      <div class="col s12 logo">
         <h4 class="logo__title center-align">Cupcake finder!</h4>
-      </div>
-      <div class="col s12 search input-field white">
-        <i class="material-icons prefix search__icon">search</i>
-        <input type="text" id="autocomplete-input" class="autocomplete" data-bind="value: searchString, valueUpdate: 'keyup'">
-        <label for="autocomplete-input" class="search__label">Search</label>
-        <ul class="autocomplete-content dropdown-content"></ul>
-      </div>
-      <div class="input-field col s12 white">
-        <select data-bind="options: sortOptions, optionsText: 'optionDisplay', value: sortBy, valueUpdate: 'afterKeyDown'"">
-        </select>
+        <nav class="search red lighten-4">
+          <div class="nav-wrapper">
+            <form>
+              <div class="input-field">
+                <input id="search" type="search" data-bind="value: searchString, valueUpdate: 'keyup'" required>
+                <label for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+        </nav>
       </div>
       <div class="col s12 accordion">
         <ul class="collapsible z-depth-0" data-collapsible="accordion">
@@ -35,17 +35,33 @@
             <div id="collapsible-header" class="collapsible-header active">
               <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
             </div>
-            <div class="collapsible-body grey lighten-5">
-              <div class="col s12">
-                <ul class="tabs">
-                  <li class="tab col s3"><a class="active" href="#test1">Test 1 <div id="favoriteCount" class="chip" data-bind="text: favoriteLocations().length"></div></a></li>
-                  <li class="tab col s3"><a href="#test2">Test 2 <div  id="nearCount" class="chip" data-bind="text: (places().length - favoriteLocations().length)"></div></a></li>
+            <div class="collapsible-body grey lighten-4">
+                <!-- Dropdown Structure -->
+                <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
+                  <li><a href="#" data-bind="text: $data.optionDisplay, click: function(){ viewModel.sortPlacesBy($index())}"></a></li>
                 </ul>
-              </div>
+                <div class="navbar-fixed">
+                  <nav class="red lighten-4"">
+                    <div class="nav-wrapper">
+                      <ul class="right hide-on-med-and-down">
+                        <!-- <li><a href="sass.html">Sass</a></li>
+                        <li><a href="badges.html">Components</a></li> -->
+                        <!-- Dropdown Trigger -->
+                        <li>
+                          <ul class="tabs red lighten-4">
+                            <li class="tab"><a class="active" href="#test1">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteLocations().length"></div></a></li>
+                            <li class="tab"><a href="#test2">Near By<div  id="nearCount" class="chip" data-bind="text: (places().length - favoriteLocations().length)"></div></a></li>
+                          </ul>
+                        </li>
+
+                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Sort By<i class="material-icons right">arrow_drop_down</i></a></li>
+                      </ul>
+                    </div>
+                  </nav>
+                </div>
+              <!-- </div> -->
               <div id="test1" class="col s12">
-                <ul data-bind="template: { foreach: visiblePlaces,
-                  beforeRemove: hideElement,
-                  afterAdd: showElement }">
+                <ul data-bind="template: { foreach: visiblePlaces}">
                   <li>
                     <div class="card" data-bind="event: { mouseover: $parent.highlight}">
                       <div class="card-image waves-effect waves-block waves-light" data-bind="click: $parent.initGalleries">
