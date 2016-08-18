@@ -44,12 +44,17 @@ var ViewModel = function() {
         marker.categories = place.categories ? place.categories : null;
         marker.placeID = place.placeID;
         marker.photos = ko.observableArray([]);
+        marker.rating = ko.observable(0);
+        marker.likes = ko.observable(0);
+        marker.priceLevel = ko.observable('');
+        marker.comments = ko.observableArray([]);
+        marker.review = ko.observable('');
 
-        self.retrievePhotos(marker);
+        self.retrieveDetails(marker);
         self.places.push(marker);
     };
 
-    self.retrievePhotos = function(place) {
+    self.retrieveDetails = function(place) {
         var detailsURL = 'https://api.foursquare.com/v2/venues/' + place.placeID;
         detailsURL += '?' + $.param({
             'client_id': self.clientID,
@@ -62,12 +67,26 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            // console.log(result.response.venue.photos.groups[0].items.length);
-            result.response.venue.photos.groups[0].items.forEach(
-                function(photo) {
-                    place.photos.push(photo.prefix + '300x300' + photo.suffix);
-                }
-            );
+            console.log(result.response.venue.phrases);
+
+            place.rating(result.response.venue.rating);
+            place.likes(result.response.venue.likes.count);
+            if (result.response.venue.price) place.priceLevel(result.response.venue.price.message);
+            if (result.response.venue.phrases) {
+                result.response.venue.phrases.forEach(
+                    function(phrase) {
+                        place.comments.push('"' + phrase.sample.text + '"');
+                    }
+                );
+                place.review(place.comments()[0].length < 65 ? place.comments()[0] : (place.comments()[0].substring(0,60) + '..."'));
+            }
+            if (result.response.venue.photos) {
+                result.response.venue.photos.groups[0].items.forEach(
+                    function(photo) {
+                        place.photos.push(photo.prefix + '150x150' + photo.suffix);
+                    }
+                );
+            }
             // view.initCarousel(place.placeID);
         }).fail(function(err) {
             console.log(err);
@@ -75,7 +94,7 @@ var ViewModel = function() {
     };
 
     self.sortPlacesBy = function(index) {
-       self.sortBy(self.sortOptions[index]);
+        self.sortBy(self.sortOptions[index]);
     };
 
     self.showElement = function(elem) {
@@ -132,7 +151,11 @@ var ViewModel = function() {
     };
 
     /* Static properties */
-    self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' }, { optionDisplay: 'Price', optionValue: 'priceLevel' }];
+    self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' },
+        { optionDisplay: 'Price', optionValue: 'priceLevel' },
+        { optionDisplay: 'Likes', optionValue: 'likes' },
+        { optionDisplay: 'Rating', optionValue: 'rating' }
+    ];
     self.clientID = 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE';
     self.clientSecret = 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ';
     self.version = '20130815';
@@ -213,9 +236,20 @@ var ViewModel = function() {
 //helpers
 
 function sort(array, sortBy) {
-    array.sort(function(l, r) {
-        return l[sortBy] > r[sortBy] ? 1 : -1
-    })
+    if (array) {
+        if (sortBy === 'title') {
+            array.sort(function(l, r) {
+                return l[sortBy] > r[sortBy] ? 1 : -1
+            })
+        } else {
+            array.sort(function(l, r) {
+                console.log(l[sortBy]());
+                console.log(r[sortBy]());
+                console.log(l[sortBy]() > r[sortBy]() ? 1 : -1);
+                return l[sortBy]() > r[sortBy]() ? 1 : -1
+            })
+        }
+    }
 }
 
 function whenAvailable(name, callback) {

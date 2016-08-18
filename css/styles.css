@@ -35,52 +35,46 @@ main {
 
 /************ Helper styles ************/
 
+.center_elem {
+    margin: 0 auto;
+}
+
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    height: 100%;
+}
+
+.font-grey {
+    color: rgb(127, 127, 127);
+}
+
+.font-pink {
+    color: rgb(127, 127, 127);
+}
+
 
 /************ Materialize modifiers ************/
-
-.collapsible {
-    /*margin-top: -5px;*/
-    margin-bottom: 0;
-    border: 0;
-}
-
-.collapsible-header {
-    background-color: transparent;
-}
-
-.collapsible li {
-    position: relative;
-}
-
-.collapsible-header {
-      position: absolute;
-    z-index: 1001;
-    height: 30px;
-    width: 60px;
-    left: 10px;
-    top: -30px;
-}
-
-.collapsible-body {
-    height: 70vh;
-    overflow: auto;
-}
-
-.collapsible-header {
-    border: 0;
-}
 
 .card {
     margin: 10px 20px;
     /*height: 300px;*/
 }
 
+.navbar-fixed,
+nav ul a {
+    height: 55px;
+}
+
 .navbar-fixed nav {
     width: 500px;
+    height: 55px
 }
 
 .tabs {
-    height: 64px;
+    height: 55px;
     margin-right: 20px;
 }
 
@@ -90,7 +84,7 @@ main {
 }
 
 .tabs .tab {
-    height: 64px;
+    height: 55px;
 }
 
 .tabs .tab a {
@@ -111,7 +105,45 @@ a .chip {
     z-index: 1;
     padding: 0;
     overflow: hidden;
-    background-image: url("../images/cupcakes40.jpg");
+    background-image: url("../images/cupcakes35.jpg");
+}
+
+.navigation__content {
+    margin-bottom: 0;
+    border: 0;
+}
+
+.navigation__content__header {
+    background-color: transparent;
+}
+
+.navigation__content li {
+    position: relative;
+}
+
+.navigation__content__header {
+    position: absolute;
+    z-index: 1001;
+    height: 30px;
+    width: 60px;
+    left: 10px;
+    top: -30px;
+    border: 0;
+}
+
+.navigation__content__body {
+    height: 80vh;
+    overflow: auto;
+}
+
+.navigation__content__body .favorites {
+    padding-top: 15px;
+    background-color: #fafafa;
+}
+
+.favorites__end {
+    margin: 70px auto 40px auto;
+    display: block;
 }
 
 .logo {
@@ -129,24 +161,98 @@ a .chip {
     letter-spacing: 2px;
     text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
     margin-bottom: 5px;
-    margin-top: 37px;
-    font-size: 3rem;
+    margin-top: 20px;
+    font-size: 2.8rem;
 }
 
-
-/*.input-field .search__icon,
-.search__input {
-    color: #90caf9 !important;
-}*/
-
 .search {
-    margin: 22px auto;
+    margin: 20px auto;
     max-width: 350px;
-    /*background-color: #fdf8f7;*/
+    height: 55px;
 }
 
 .navigation div.accordion {
     padding: 0;
+}
+
+.card__image {
+    max-width: 120px;
+    max-height: 120px;
+    margin: 14px 0;
+}
+
+.card__details {
+    max-height: 120px;
+    width: 69%;
+    padding-left: 15px;
+}
+
+.collapsible-header .card__details {
+    line-height: 25px;
+}
+
+.card__number {
+    width: 13%;
+    margin: 0.7rem 0 0.656rem 0;
+}
+
+.card__title {
+    width: 87%;
+    font-size: 1.3em;
+}
+
+.card__button {
+    width: 15%;
+    /*display: block;*/
+}
+
+.card__ratings {
+    width: 80%;
+}
+
+.card__price {
+    width: 20%;
+    padding-left: 2%;
+    /*float: right;*/
+}
+
+.card__comment {
+    width: 100%;
+    color: #8c8c8c;
+    line-height: 18px;
+    margin-top: 30px;
+}
+
+.card__comment__icon {
+    width: 11%;
+}
+
+.card__comment__icon i {
+    line-height: 18px;
+    margin-top: 3px;
+}
+
+.card__comment__text {
+    width: 89%;
+    font-style: italic;
+    font-size: 14px;
+}
+
+span .card__price__icon {
+    font-size: 16px;
+    line-height: 25px;
+    width: 15px;
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+span.badge.card__price__text {
+    font-weight: 300;
+    font-size: 0.8rem;
+    color: #fff;
+    background-color: #26a69a;
+    border-radius: 2px;
+    padding-left: 0;
 }
 
 

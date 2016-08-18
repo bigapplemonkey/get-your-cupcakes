@@ -30,12 +30,12 @@
         </nav>
       </div>
       <div class="col s12 accordion">
-        <ul class="collapsible z-depth-0" data-collapsible="accordion">
+        <ul class="collapsible navigation__content z-depth-0" data-collapsible="accordion">
           <li>
-            <div id="collapsible-header" class="collapsible-header active">
+            <div id="collapsible-header" class="collapsible-header active navigation__content__header">
               <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
             </div>
-            <div class="collapsible-body grey lighten-4">
+            <div class="collapsible-body navigation__content__body grey lighten-4">
                 <!-- Dropdown Structure -->
                 <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
                   <li><a href="#" data-bind="text: $data.optionDisplay, click: function(){ viewModel.sortPlacesBy($index())}"></a></li>
@@ -60,45 +60,36 @@
                   </nav>
                 </div>
               <!-- </div> -->
-              <div id="test1" class="col s12">
-                <ul data-bind="template: { foreach: visiblePlaces}">
-                  <li>
-                    <div class="card" data-bind="event: { mouseover: $parent.highlight}">
-                      <div class="card-image waves-effect waves-block waves-light" data-bind="click: $parent.initGalleries">
-                        <!-- ko if: photos -->
-                          <img class="activator" src="" data-bind="attr: {src: photos()[0]}">
-                        <!-- /ko -->
-                      </div>
-                      <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4" data-bind="html: title + '<i class=&quot;material-icons right&quot;>more_vert</i>'"></span>
-                        <a href="#!" class="secondary-content" data-bind="click: $parent.removeFromFavorites"><i class="material-icons">grade</i></a>
-                        <p><a href="" data-bind="attr: {href: website}">This is a link</a></p>
-                      </div>
-                      <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
-                        <!-- ko if: photos -->
-                         <div class="carousel" data-bind="foreach: photos(), attr: { id: placeID }">
-                          <a class="carousel-item" href="#"><img src="" data-bind="attr: {src: $data}"></a>
+              <div id="test1" class="favorites col s12">
+                <ul class="collapsible popout" data-collapsible="accordion" data-bind="template: { foreach: visiblePlaces}">
+                  <li data-bind="event: { mouseover: $parent.highlight}">
+                    <div class="collapsible-header flex-container">
+                      <img class="card__image" src="" alt="Cupcake store" data-bind="attr: {src: photos()[0]}">
+                      <div class="card__details flex-container">
+                        <div class="teal-text text-lighten-1 card__number" data-bind="text: '#' + ($index() + 1)"></div>
+                        <h5 class="font-grey card__title" data-bind="text: title"></h5>
+                        <div class="card__ratings">
+                          <span class="red-text text-lighten-2" data-bind="text: rating().toFixed(1)"></span><span class="font-grey"> Rating | </span>
+                          <span class="teal-text text-lighten-1" data-bind="text: likes"></span><span class="font-grey"> Likes </span>
                         </div>
-                       <!--  <div class="carousel">
-                          <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/Z6KsXjbq4TkqFLVpf-p9PgH1kfUogdvgVX4i9XlKYUM.jpg" data-bind="attr: {src: $data}"></a>
-
-                          <a class="carousel-item" href="#one!"><img src="https://irs0.4sqi.net/img/general/300x300/16999799_m95aJqqmg9GSnsc8glzGyM6xoDWvQbdJediK4Jwlw84.jpg"></a>
-
-                          <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/fEV3dv0Qa2IDz53tBw6NHQI4rkyAhE0c585UF3NaOBc.jpg"></a>
-
-                          <a class="carousel-item" href="#one!"><img src="https://irs1.4sqi.net/img/general/300x300/3648652_9TvpSI847hWccGq7NvZ8ymna77BzKm0efNNcpgYYMX0.jpg"></a>
-
-                          <a class="carousel-item" href="#one!"><img src="https://irs0.4sqi.net/img/general/300x300/1794728_d6gl7Q63KlPsUElFhw8ugX_eDgG14MNflHIdvWEw7Og.jpg"></a>
-
-                          <a class="carousel-item" href="#one!"><img src="https://irs2.4sqi.net/img/general/300x300/30823609_KYa9rLIFl7IM34HuXhg1gy71Okp_Vxcbs9SEjjKpduM.jpg"></a>
-                        </div> -->
-                        <!-- /ko -->
-                        <p data-bind="text: address"></p>
+                        <div class="card__price">
+                           <!-- ko if: priceLevel -->
+                              <span class="card__price__text badge z-depth-1" data-bind="html: priceLevel() + '<i class=&quot;card__price__icon material-icons&quot;>attach_money</i>'"></span>
+                          <!-- /ko -->
+                        </div>
+                        <div class="card__comment flex-container">
+                          <!-- ko if: review -->
+                          <div class="card__comment__icon"><i class="material-icons">account_circle</i></div>
+                          <div class="card__comment__text" data-bind="text: review"></div>
+                          <!-- /ko -->
+                        </div>
+                         <!-- <a class="btn-floating btn-large waves-effect waves-light red card__button"><i class="material-icons">add</i></a> -->
                       </div>
                     </div>
+                    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
                   </li>
                 </ul>
+                <img src="images/smily-cupcake_7.png" alt="" class="favorites__end">
               </div>
               <div id="test2" class="col s12">
                 <ul class="collection" data-bind="foreach: visiblePlaces">
