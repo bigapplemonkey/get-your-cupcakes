@@ -1,3 +1,12 @@
+@import url(http://weloveiconfonts.com/api/?family=zocial);
+
+/* zocial */
+
+[class*="zocial-"]:before {
+    font-family: 'zocial', sans-serif;
+}
+
+
 /************ All DOM styles ************/
 
 * {
@@ -53,6 +62,15 @@ main {
 
 .font-pink {
     color: rgb(127, 127, 127);
+}
+
+.make-block {
+    display: block;
+}
+
+.social-icon {
+    margin-right: 15px;
+    color: #8c8c8c;
 }
 
 
@@ -136,14 +154,18 @@ a .chip {
     overflow: auto;
 }
 
-.navigation__content__body .favorites {
+.navigation__content__body .lighten-5 {
     padding-top: 15px;
-    background-color: #fafafa;
+    padding-bottom: 35px;
 }
 
-.favorites__end {
-    margin: 70px auto 40px auto;
-    display: block;
+.navigation__footer__image1 {
+    margin: 10px auto 20px auto;
+    padding-top: 50px;
+}
+
+.navigation__footer__image2 {
+    margin: 10px auto 40px auto;
 }
 
 .logo {
@@ -185,6 +207,7 @@ a .chip {
     max-height: 120px;
     width: 69%;
     padding-left: 15px;
+    margin-top: 14px;
 }
 
 .collapsible-header .card__details {
@@ -192,50 +215,91 @@ a .chip {
 }
 
 .card__number {
-    width: 13%;
-    margin: 0.7rem 0 0.656rem 0;
+    width: 12%;
+    margin-top: 0;
 }
 
 .card__title {
-    width: 87%;
-    font-size: 1.3em;
+    width: 83%;
+    font-size: 1.1em;
+    letter-spacing: .03em;
+    color: rgba(0, 0, 0, .7);
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 25px;
+}
+
+.secondary-content {
+    width: 5%;
+    line-height: 25px;
+    float: none;
+}
+
+.secondary-content i {
+    line-height: 25px;
 }
 
 .card__button {
     width: 15%;
-    /*display: block;*/
 }
 
 .card__ratings {
     width: 80%;
+    font-size: 13.5px;
 }
 
 .card__price {
     width: 20%;
     padding-left: 2%;
-    /*float: right;*/
 }
 
-.card__comment {
+.card__comment,
+.card__comments,
+.card__contacts {
     width: 100%;
     color: #8c8c8c;
     line-height: 18px;
-    margin-top: 30px;
+    margin-top: 38px;
+}
+
+.card__contacts {
+    margin-top: 0;
 }
 
 .card__comment__icon {
     width: 11%;
 }
 
-.card__comment__icon i {
+.card__comments__icon,
+.card__contacts__icon {
+    width: 8%;
+}
+
+.card__comment__icon i,
+.card__comments__icon i,
+.card__contacts__icon i {
     line-height: 18px;
     margin-top: 3px;
 }
 
-.card__comment__text {
+.card__comment__text,
+.card__comments__text,
+.card__contacts__text {
     width: 89%;
     font-style: italic;
-    font-size: 14px;
+    font-size: 13.5px;
+    letter-spacing: 0.03em;
+    color: rgba(0, 0, 0, .7);
+    margin-bottom: 7px;
+    text-align: left;
+}
+
+.card__contacts__text a {
+    font-style: normal;
+}
+
+.card__comments__text {
+    width: 92%;
 }
 
 span .card__price__icon {
@@ -243,7 +307,7 @@ span .card__price__icon {
     line-height: 25px;
     width: 15px;
     margin-right: 0;
-    margin-left: 5px;
+    margin-left: 2px;
 }
 
 span.badge.card__price__text {
@@ -253,6 +317,50 @@ span.badge.card__price__text {
     background-color: #26a69a;
     border-radius: 2px;
     padding-left: 0;
+}
+
+.card__content {
+    background-color: #f2f8f9;
+    padding: 20px;
+    color: rgba(0, 0, 0, .7);
+}
+
+.card__content__attribute {
+    /*width: 7%;*/
+}
+
+.toast__image {
+    max-width: 30px;
+    /*margin-top: 5px;*/
+    margin-right: 5px;
+}
+
+.toast.rounded {
+    background-color: #e1f5fe;
+    padding-top: 5px;
+}
+
+.card__content__address {
+    width: 75%;
+}
+
+.card__content__attributes {
+    width: 25%;
+    text-align: right;
+}
+
+.card__contacts__social {
+    width: 100%;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.card__content__website {
+    width: 100%;
+}
+
+.backdrop {
+    /*background-color: purple;*/
 }
 
 

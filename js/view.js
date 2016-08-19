@@ -4,9 +4,9 @@ var view = {
         $(document).ready(function() {
             self.favoriteCountElem = $('#favoriteCount');
             self.nearCountElem = $('#nearCount');
-            $('.collapsible').collapsible({
-                accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-            });
+            // $('.collapsible').collapsible({
+            //     accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            // });
 
             var expanded = true;
             $('#collapsible-header').click(function() {
@@ -26,7 +26,7 @@ var view = {
                     var selectedTab = elem[0].id;
                     viewModel.searchString('');
                     $('input').blur();
-                    if (selectedTab === 'test1') {
+                    if (selectedTab === 'favorites') {
                         viewModel.isTab1Selected(true);
                         self.favoriteCountElem.removeClass('light-green lighten-1');
                     } else {
@@ -36,11 +36,6 @@ var view = {
 
                 }
             });
-
-            $('.collapsible').collapsible({
-                accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-            });
-
         });
     },
 
@@ -53,12 +48,19 @@ var view = {
             });
         });
     },
+    initTooltips: function() {
+        $(document).ready(function() {
+            $('.tooltipped').tooltip({ delay: 30 });
+        });
+    },
     updateFavoriteCounter: function(placeName) {
         this.favoriteCountElem.addClass('light-green lighten-1');
-        Materialize.toast(placeName + ' added to favorites!', 1500, 'rounded');
+        var $toastContent = $('<span class="teal-text text-lighten-1"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' added to favorites!</span>');
+        Materialize.toast($toastContent, 1400, 'rounded');
     },
     updateNearCounter: function(placeName) {
         this.nearCountElem.addClass('yellow lighten-3');
-        Materialize.toast(placeName + ' removed from favorites!', 1500, 'rounded');
+        var $toastContent = $('<span class="teal-text text-lighten-1"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites!</span>');
+        Materialize.toast($toastContent, 1400, 'rounded');
     }
 }

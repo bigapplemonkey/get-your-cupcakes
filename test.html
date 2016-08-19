@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,112 +13,122 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
     <!--Import custom css-->
     <link rel="stylesheet" href="css/styles.css">
-  </head>
-  <body>
-    <div class="row navigation z-depth-1">
-      <div class="col s12 logo">
-        <h4 class="logo__title center-align">Cupcake finder!</h4>
-        <nav class="search red lighten-4">
-          <div class="nav-wrapper">
-            <form>
-              <div class="input-field">
-                <input id="search" type="search" data-bind="value: searchString, valueUpdate: 'keyup'" required>
-                <label for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-              </div>
-            </form>
-          </div>
-        </nav>
-      </div>
-      <div class="col s12 accordion">
-        <ul class="collapsible navigation__content z-depth-0" data-collapsible="accordion">
-          <li>
-            <div id="collapsible-header" class="collapsible-header active navigation__content__header">
-              <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
-            </div>
-            <div class="collapsible-body navigation__content__body grey lighten-4">
-                <!-- Dropdown Structure -->
-                <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
-                  <li><a href="#" data-bind="text: $data.optionDisplay, click: function(){ viewModel.sortPlacesBy($index())}"></a></li>
-                </ul>
-                <div class="navbar-fixed">
-                  <nav class="red lighten-4"">
-                    <div class="nav-wrapper">
-                      <ul class="right hide-on-med-and-down">
-                        <!-- <li><a href="sass.html">Sass</a></li>
-                        <li><a href="badges.html">Components</a></li> -->
-                        <!-- Dropdown Trigger -->
-                        <li>
-                          <ul class="tabs red lighten-4">
-                            <li class="tab"><a class="active" href="#test1">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteLocations().length"></div></a></li>
-                            <li class="tab"><a href="#test2">Near By<div  id="nearCount" class="chip" data-bind="text: (places().length - favoriteLocations().length)"></div></a></li>
-                          </ul>
-                        </li>
+</head>
 
-                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Sort By<i class="material-icons right">arrow_drop_down</i></a></li>
-                      </ul>
-                    </div>
-                  </nav>
+<body>
+    <div class="row navigation z-depth-1">
+        <div class="col s12 logo">
+            <h4 class="logo__title center-align">Cupcake finder!</h4>
+            <nav class="search red lighten-4">
+                <div class="nav-wrapper">
+                    <form>
+                        <div class="input-field">
+                            <input id="search" type="search" data-bind="value: searchString, valueUpdate: 'keyup'" required>
+                            <label for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
                 </div>
-              <!-- </div> -->
-              <div id="test1" class="favorites col s12">
-                <ul class="collapsible popout" data-collapsible="accordion" data-bind="template: { foreach: visiblePlaces}">
-                  <li data-bind="event: { mouseover: $parent.highlight}">
-                    <div class="collapsible-header flex-container">
-                      <img class="card__image" src="" alt="Cupcake store" data-bind="attr: {src: photos()[0]}">
-                      <div class="card__details flex-container">
-                        <div class="teal-text text-lighten-1 card__number" data-bind="text: '#' + ($index() + 1)"></div>
-                        <h5 class="font-grey card__title" data-bind="text: title"></h5>
-                        <div class="card__ratings">
-                          <span class="red-text text-lighten-2" data-bind="text: rating().toFixed(1)"></span><span class="font-grey"> Rating | </span>
-                          <span class="teal-text text-lighten-1" data-bind="text: likes"></span><span class="font-grey"> Likes </span>
-                        </div>
-                        <div class="card__price">
-                           <!-- ko if: priceLevel -->
-                              <span class="card__price__text badge z-depth-1" data-bind="html: priceLevel() + '<i class=&quot;card__price__icon material-icons&quot;>attach_money</i>'"></span>
-                          <!-- /ko -->
-                        </div>
-                        <div class="card__comment flex-container">
-                          <!-- ko if: review -->
-                          <div class="card__comment__icon"><i class="material-icons">account_circle</i></div>
-                          <div class="card__comment__text" data-bind="text: review"></div>
-                          <!-- /ko -->
-                        </div>
-                         <!-- <a class="btn-floating btn-large waves-effect waves-light red card__button"><i class="material-icons">add</i></a> -->
-                      </div>
+            </nav>
+        </div>
+        <div class="col s12 accordion">
+            <ul class="collapsible navigation__content z-depth-0" data-collapsible="accordion">
+                <li>
+                    <div id="collapsible-header" class="collapsible-header active navigation__content__header">
+                        <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
                     </div>
-                    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                  </li>
-                </ul>
-                <img src="images/smily-cupcake_7.png" alt="" class="favorites__end">
-              </div>
-              <div id="test2" class="col s12">
-                <ul class="collection" data-bind="foreach: visiblePlaces">
-                  <li class="collection-item avatar" data-bind="event: { mouseover: $parent.highlight}">
-                    <img src="https://placehold.it/350x150" alt="" class="circle">
-                    <span class="title" data-bind="text: title"></span>
-                    <p>
-                      <span data-bind="text: address"></span><br>
-                      <!-- Second Line -->
-                      <a href="" data-bind="if: website, attr: {href: website}">This is a link</a>
-                    <div data-bind="foreach: categories">
-                      <div class="chip">
-                        <span data-bind="text: name"></span>
-                        <!-- <i class="close material-icons">close</i> -->
-                      </div>
+                    <div class="collapsible-body navigation__content__body grey lighten-4">
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
+                            <li>
+                                <a href="#" data-bind="text: $data.optionDisplay, click: function(){ viewModel.sortPlacesBy($index())}"></a>
+                            </li>
+                        </ul>
+                        <div class="navbar-fixed">
+                            <nav class="red lighten-4">
+                                <div class="nav-wrapper">
+                                    <ul class="right hide-on-med-and-down">
+                                        <!-- <li><a href="sass.html">Sass</a></li>
+                        <li><a href="badges.html">Components</a></li> -->
+                                        <!-- Dropdown Trigger -->
+                                        <li>
+                                            <ul class="tabs red lighten-4">
+                                                <li class="tab"><a class="active" href="#test1">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteLocations().length"></div></a></li>
+                                                <li class="tab"><a href="#test2">Near By<div  id="nearCount" class="chip" data-bind="text: (places().length - favoriteLocations().length)"></div></a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Sort By<i class="material-icons right">arrow_drop_down</i></a></li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                        <!-- </div> -->
+                        <div id="test1" class="favorites col s12">
+                            <ul class="collapsible popout" data-collapsible="accordion" data-bind="template: { foreach: visiblePlaces}">
+                                <li data-bind="event: { mouseover: $parent.highlight}">
+                                    <div class="collapsible-header flex-container">
+                                        <img class="card__image" src="" alt="Cupcake store" data-bind="attr: {src: photos()[0]}">
+                                        <div class="card__details flex-container">
+                                            <div class="teal-text text-lighten-1 card__number" data-bind="text: '#' + ($index() + 1)"></div>
+                                            <h5 class="font-grey card__title" data-bind="text: title"></h5>
+                                            <div class="card__ratings">
+                                                <span class="red-text text-lighten-2" data-bind="text: rating().toFixed(1)"></span><span class="font-grey"> Rating | </span>
+                                                <span class="teal-text text-lighten-1" data-bind="text: likes"></span><span class="font-grey"> Likes </span>
+                                            </div>
+                                            <div class="card__price">
+                                                <!-- ko if: priceLevel -->
+                                                <span class="card__price__text badge z-depth-1" data-bind="html: priceLevel() + '<i class=&quot;card__price__icon material-icons&quot;>attach_money</i>'"></span>
+                                                <!-- /ko -->
+                                            </div>
+                                            <div class="card__comment flex-container">
+                                                <!-- ko if: review -->
+                                                <div class="card__comment__icon"><i class="material-icons">account_circle</i></div>
+                                                <div class="card__comment__text" data-bind="text: review"></div>
+                                                <!-- /ko -->
+                                            </div>
+                                            <!-- <a class="btn-floating btn-large waves-effect waves-light red card__button"><i class="material-icons">add</i></a> -->
+                                        </div>
+                                    </div>
+                                    <div class="collapsible-body card__content flex-container">
+                                        <i class="material-icons card__content__attribute teal-text text-lighten-1 tooltipped" data-bind="visible: creditcards" data-position="top" data-delay="50" data-tooltip="Credit cards">credit_card</i>
+                                        <i class="material-icons card__content__attribute teal-text text-lighten-1 tooltipped" data-bind="visible: wifi" data-position="top" data-delay="50" data-tooltip="Wi-Fi">wifi</i>
+                                        <i class="material-icons card__content__attribute teal-text text-lighten-1 tooltipped" data-bind="visible: delivery" data-position="top" data-delay="50" data-tooltip="Delivery">local_shipping</i>
+                                        <i class="material-icons card__content__attribute teal-text text-lighten-1 tooltipped" data-bind="visible: outdoorseating" data-position="top" data-delay="50" data-tooltip="Outdoor seating">beach_access</i>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="test2" class="col s12">
+                            <ul class="collection" data-bind="foreach: visiblePlaces">
+                                <li class="collection-item avatar" data-bind="event: { mouseover: $parent.highlight}">
+                                    <img src="https://placehold.it/350x150" alt="" class="circle">
+                                    <span class="title" data-bind="text: title"></span>
+                                    <p>
+                                        <span data-bind="text: address"></span>
+                                        <br>
+                                        <!-- Second Line -->
+                                        <a href="" data-bind="if: website, attr: {href: website}">This is a link</a>
+                                        <div data-bind="foreach: categories">
+                                            <div class="chip">
+                                                <span data-bind="text: name"></span>
+                                                <!-- <i class="close material-icons">close</i> -->
+                                            </div>
+                                        </div>
+                                    </p>
+                                    <a href="#!" class="secondary-content" data-bind="click: $parent.addToFavorites"><i class="material-icons">grade</i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <img src="images/smily-cupcake_7.png" alt="" class="navigation__footer__image1 make-block">
+                        <img src="images/Powered-by-Foursquare.png" alt="" class="navigation__footer__image2 make-block">
                     </div>
-                    </p>
-                    <a href="#!" class="secondary-content" data-bind="click: $parent.addToFavorites"><i class="material-icons">grade</i></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
+                </li>
+            </ul>
+        </div>
     </div>
     <main>
-      <div id="map"></div>
+        <div id="map"></div>
     </main>
     <!--Import jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -132,5 +143,6 @@
     <script src="js/map.js"></script>
     <!--Import Google Map API -->
     <script asyn src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap"></script>
-  </body>
+</body>
+
 </html>

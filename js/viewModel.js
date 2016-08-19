@@ -49,7 +49,14 @@ var ViewModel = function() {
         marker.priceLevel = ko.observable('');
         marker.comments = ko.observableArray([]);
         marker.review = ko.observable('');
-
+        marker.wifi = ko.observable(false);
+        marker.outdoorseating = ko.observable(false);
+        marker.delivery = ko.observable(false);
+        marker.creditcards = ko.observable(false);
+        marker.formattedPhone = ko.observable('');
+        marker.phone = ko.observable('');
+        marker.facebook = ko.observable('');
+        marker.twitter = ko.observable('');
         self.retrieveDetails(marker);
         self.places.push(marker);
     };
@@ -67,10 +74,12 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            console.log(result.response.venue.phrases);
-
             place.rating(result.response.venue.rating);
             place.likes(result.response.venue.likes.count);
+            place.formattedPhone(result.response.venue.contact.formattedPhone);
+            place.phone(result.response.venue.contact.phone);
+            if (result.response.venue.contact.facebook) place.facebook(result.response.venue.contact.facebook);
+            if (result.response.venue.contact.twitter) place.twitter(result.response.venue.contact.twitter);
             if (result.response.venue.price) place.priceLevel(result.response.venue.price.message);
             if (result.response.venue.phrases) {
                 result.response.venue.phrases.forEach(
@@ -78,7 +87,22 @@ var ViewModel = function() {
                         place.comments.push('"' + phrase.sample.text + '"');
                     }
                 );
-                place.review(place.comments()[0].length < 65 ? place.comments()[0] : (place.comments()[0].substring(0,60) + '..."'));
+                place.review(place.comments()[0].length < 65 ? place.comments()[0] : (place.comments()[0].substring(0, 60) + '..."'));
+            }
+            if (result.response.venue.attributes) {
+                result.response.venue.attributes.groups.forEach(
+                    function(group) {
+                        group.items.forEach(function(item) {
+                            var propertyName = item.displayName.replace(/\s+/g, '').replace('-', '').toLowerCase();
+                            if (place.hasOwnProperty(propertyName)) {
+                                var value = item.displayValue.toLowerCase();
+                                if (value.indexOf('yes') >= 0 || value.indexOf('delivery') >= 0) {
+                                    place[propertyName](true);
+                                }
+                            }
+                        });
+                    }
+                );
             }
             if (result.response.venue.photos) {
                 result.response.venue.photos.groups[0].items.forEach(
@@ -150,6 +174,10 @@ var ViewModel = function() {
         view.initCarousel();
     };
 
+    self.initViewElements = function() {
+        view.initTooltips();
+    };
+
     /* Static properties */
     self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' },
         { optionDisplay: 'Price', optionValue: 'priceLevel' },
@@ -212,7 +240,7 @@ var ViewModel = function() {
                             placeID: venue.id,
                             point: { lat: venue.location.lat, lng: venue.location.lng },
                             name: venue.name,
-                            address: venue.location.address,
+                            address: venue.location.formattedAddress[0] + ', ' + venue.location.formattedAddress[1],
                             website: venue.url,
                             categories: venue.categories
                         }, true);
@@ -243,9 +271,6 @@ function sort(array, sortBy) {
             })
         } else {
             array.sort(function(l, r) {
-                console.log(l[sortBy]());
-                console.log(r[sortBy]());
-                console.log(l[sortBy]() > r[sortBy]() ? 1 : -1);
                 return l[sortBy]() > r[sortBy]() ? 1 : -1
             })
         }
