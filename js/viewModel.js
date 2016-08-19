@@ -240,7 +240,7 @@ var ViewModel = function() {
                             placeID: venue.id,
                             point: { lat: venue.location.lat, lng: venue.location.lng },
                             name: venue.name,
-                            address: venue.location.formattedAddress[0] + ', ' + venue.location.formattedAddress[1],
+                            address: [venue.location.formattedAddress[0], venue.location.formattedAddress[1]],
                             website: venue.url,
                             categories: venue.categories
                         }, true);

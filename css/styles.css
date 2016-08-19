@@ -57,7 +57,7 @@ main {
 }
 
 .font-grey {
-    color: rgb(127, 127, 127);
+    color: rgba(127, 127, 127, 0.85);
 }
 
 .font-pink {
@@ -70,7 +70,7 @@ main {
 
 .social-icon {
     margin-right: 15px;
-    color: #8c8c8c;
+    /*color: #7e7e7e*/
 }
 
 
@@ -87,7 +87,7 @@ nav ul a {
 }
 
 .navbar-fixed nav {
-    width: 500px;
+    width: 430px;
     height: 55px
 }
 
@@ -114,12 +114,48 @@ a .chip {
     margin-left: 5px;
 }
 
+.btn-floating {
+    position: absolute;
+    right: 10px;
+}
+
+.btn-floating,
+.btn-floating i {
+    line-height: 28px;
+    width: 28px;
+    height: 28px;
+}
+
+.collapsible-header {
+    padding-right: 5px;
+}
+
+.divider {
+    margin: 20px auto 13px auto;
+}
+
+li.active {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+#near,
+#favorites {
+    padding: 0;
+}
+
+#near ul,
+#favorites ul {
+    margin: 0;
+}
+
 
 /************ Header ************/
 
 .navigation {
     position: fixed;
-    width: 500px;
+    width: 430px;
     z-index: 1;
     padding: 0;
     overflow: hidden;
@@ -168,6 +204,10 @@ a .chip {
     margin: 10px auto 40px auto;
 }
 
+.navigation__tabs {
+    width: 300px;
+}
+
 .logo {
     /*    background-image: url("../images/cupcakes40.jpg");
 */
@@ -198,20 +238,32 @@ a .chip {
 }
 
 .card__image {
-    max-width: 120px;
-    max-height: 120px;
+    max-width: 110px;
+    max-height: 110px;
     margin: 14px 0;
+}
+
+.card__gallery {
+    max-width: 150px;
+    max-height: 150px;
+    margin: 0;
+}
+
+.test {
+    width: 59%;
 }
 
 .card__details {
     max-height: 120px;
-    width: 69%;
-    padding-left: 15px;
+    width: 70%;
+    padding-left: 5px;
+    padding-right: 10px;
     margin-top: 14px;
+    position: relative;
 }
 
 .collapsible-header .card__details {
-    line-height: 25px;
+    line-height: 20px;
 }
 
 .card__number {
@@ -220,23 +272,23 @@ a .chip {
 }
 
 .card__title {
-    width: 83%;
-    font-size: 1.1em;
+    width: 88%;
+    font-size: 15px;
     letter-spacing: .03em;
     color: rgba(0, 0, 0, .7);
     margin-top: 0;
     margin-bottom: 0;
-    line-height: 25px;
+    line-height: 20px;
 }
 
 .secondary-content {
     width: 5%;
-    line-height: 25px;
+    line-height: 20px;
     float: none;
 }
 
 .secondary-content i {
-    line-height: 25px;
+    line-height: 20px;
 }
 
 .card__button {
@@ -245,7 +297,7 @@ a .chip {
 
 .card__ratings {
     width: 80%;
-    font-size: 13.5px;
+    font-size: 13px;
 }
 
 .card__price {
@@ -257,54 +309,61 @@ a .chip {
 .card__comments,
 .card__contacts {
     width: 100%;
-    color: #8c8c8c;
     line-height: 18px;
-    margin-top: 38px;
 }
 
-.card__contacts {
-    margin-top: 0;
+.card__comment {
+    margin-top: 37px;
 }
 
 .card__comment__icon {
     width: 11%;
+    color: #7e7e7e;
 }
 
-.card__comments__icon,
+.card__comments__icon {
+    width: 11%;
+    color: #7e7e7e;
+}
+
 .card__contacts__icon {
     width: 8%;
+    color: #7e7e7e;
 }
 
 .card__comment__icon i,
-.card__comments__icon i,
-.card__contacts__icon i {
+.card__comments__icon i {
     line-height: 18px;
     margin-top: 3px;
+}
+
+.card__contacts__icon i {
+    line-height: 18px;
+    margin-top: 0;
 }
 
 .card__comment__text,
 .card__comments__text,
 .card__contacts__text {
     width: 89%;
-    font-style: italic;
-    font-size: 13.5px;
+    font-size: 13px;
     letter-spacing: 0.03em;
-    color: rgba(0, 0, 0, .7);
     margin-bottom: 7px;
     text-align: left;
 }
 
-.card__contacts__text a {
-    font-style: normal;
+.card__contacts__text {
+    margin-bottom: 0;
 }
 
 .card__comments__text {
-    width: 92%;
+    width: 89%;
+    padding-right: 3px;
 }
 
 span .card__price__icon {
     font-size: 16px;
-    line-height: 25px;
+    line-height: 18px;
     width: 15px;
     margin-right: 0;
     margin-left: 2px;
@@ -317,12 +376,16 @@ span.badge.card__price__text {
     background-color: #26a69a;
     border-radius: 2px;
     padding-left: 0;
+    padding-top: 1px;
+    left: 38px;
+    max-width: 74px;
+    line-height: 18px;
 }
 
 .card__content {
-    background-color: #f2f8f9;
-    padding: 20px;
-    color: rgba(0, 0, 0, .7);
+    padding: 20px 30px;
+    font-size: 13px;
+    background-color: #fffdf0;
 }
 
 .card__content__attribute {
@@ -341,22 +404,26 @@ span.badge.card__price__text {
 }
 
 .card__content__address {
-    width: 75%;
+    width: 70%;
 }
 
 .card__content__attributes {
-    width: 25%;
+    width: 30%;
     text-align: right;
 }
 
 .card__contacts__social {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 3px;
     text-align: left;
 }
 
 .card__content__website {
     width: 100%;
+}
+
+.card__content .material-icons {
+    font-size: 22px;
 }
 
 .backdrop {

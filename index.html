@@ -48,7 +48,7 @@
                             <nav class="red lighten-4">
                                 <div class="nav-wrapper">
                                     <ul class="right hide-on-med-and-down">
-                                        <li>
+                                        <li class="navigation__tabs">
                                             <ul class="tabs red lighten-4">
                                                 <li class="tab"><a class="active" href="#favorites">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteLocations().length"></div></a></li>
                                                 <li class="tab"><a href="#near">Near By<div  id="nearCount" class="chip" data-bind="text: (places().length - favoriteLocations().length)"></div></a></li>
@@ -60,11 +60,11 @@
                             </nav>
                         </div>
                         <div id="favorites" class="col s12 grey lighten-5">
-                            <ul class="collapsible popout" data-collapsible="accordion" data-bind="template: {  name: 'place-list', foreach: visiblePlaces}">
+                            <ul class="collapsible" data-collapsible="accordion" data-bind="template: {  name: 'place-list', foreach: visiblePlaces}">
                             </ul>
                         </div>
                         <div id="near" class="col s12 grey lighten-5">
-                            <ul class="collapsible popout" data-collapsible="accordion" data-bind="template: {  name: 'place-list', foreach: visiblePlaces}">
+                            <ul class="collapsible" data-collapsible="accordion" data-bind="template: {  name: 'place-list', foreach: visiblePlaces}">
                             </ul>
                         </div>
                         <img src="images/smily-cupcake_7.png" alt="" class="navigation__footer__image1 make-block">
@@ -81,12 +81,11 @@
     <script type="text/html" id="place-list">
         <li data-bind="event: { mouseover: $parent.highlight} ">
             <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements">
-                <img class="card__image " src=" " alt="Cupcake store " data-bind="attr: {src: photos()[0]} ">
                 <div class="card__details flex-container ">
                     <div class="teal-text text-lighten-1 card__number " data-bind="text: '#' + ($index() + 1) "></div>
                     <h5 class="font-grey card__title " data-bind="text: title "></h5>
-                    <a href="#! " class="secondary-content " data-bind="visible: $parent.isTab1Selected, click: $parent.removeFromFavorites "><i class="material-icons ">grade</i></a>
-                    <a href="#! " class="secondary-content " data-bind="visible: !$parent.isTab1Selected(), click: $parent.addToFavorites "><i class="material-icons ">grade</i></a>
+                    <a class="btn-floating teal lighten-1" data-bind="visible: $parent.isTab1Selected, click: $parent.removeFromFavorites"><i class="material-icons">remove</i></a>
+                    <a class="btn-floating teal lighten-1" data-bind="visible: !$parent.isTab1Selected(), click: $parent.addToFavorites "><i class="material-icons">add</i></a>
                     <div class="card__number"></div>
                     <div class="card__ratings ">
                         <span class="red-text text-lighten-2 " data-bind="text: rating().toFixed(1) "></span><span class="font-grey "> Rating | </span>
@@ -104,10 +103,11 @@
                         <!-- /ko -->
                     </div>
                 </div>
+                <img class="card__image " src=" " alt="Cupcake store " data-bind="attr: {src: photos()[0]} ">
             </div>
-            <div class="collapsible-body card__content ">
+            <div class="collapsible-body card__content">
                 <div class="flex-container">
-                    <div class="card__content__address" data-bind="text: address "></div>
+                    <div class="card__content__address" data-bind="html: address[0] + '<br>' + address[1] "></div>
                     <div class="card__content__attributes">
                         <i class="material-icons card__content__attribute teal-text text-lighten-1 tooltipped " data-bind="visible: creditcards " data-position="top " data-tooltip="Credit cards ">credit_card</i>
                         <i class="material-icons card__content__attribute teal-text text-lighten-1 tooltipped " data-bind="visible: wifi " data-position="top " data-tooltip="Wi-Fi ">wifi</i>
@@ -129,13 +129,17 @@
                         </div>
                     </div>
                 </div>
-                <div class=" ">
-                    <!-- ko if: comments -->
-                    <div class="card__comments flex-container " data-bind="foreach: comments ">
-                        <div class="card__comments__icon "><i class="material-icons ">account_circle</i></div>
-                        <div class="card__comments__text " data-bind="text: $data "></div>
+                <div class="divider"></div>
+                <div class="flex-container">
+                    <div class="test">
+                        <!-- ko if: comments -->
+                        <div class="card__comments flex-container " data-bind="foreach: comments ">
+                            <div class="card__comments__icon "><i class="material-icons ">account_circle</i></div>
+                            <div class="card__comments__text " data-bind="text: $data "></div>
+                        </div>
+                        <!-- /ko -->
                     </div>
-                    <!-- /ko -->
+                    <img class="card__gallery " src=" " alt="Cupcake store " data-bind="attr: {src: photos()[0]} ">
                 </div>
             </div>
         </li>
