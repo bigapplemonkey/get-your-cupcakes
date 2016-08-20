@@ -47,7 +47,7 @@
                         <div class="navbar-fixed">
                             <nav class="red lighten-4">
                                 <div class="nav-wrapper">
-                                    <ul class="right hide-on-med-and-down">
+                                    <ul class="right">
                                         <li class="navigation__tabs">
                                             <ul class="tabs red lighten-4">
                                                 <li class="tab"><a class="active" href="#favorites">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteLocations().length"></div></a></li>
@@ -79,7 +79,7 @@
     </main>
     <!--List Template-->
     <script type="text/html" id="place-list">
-        <li data-bind="event: { mouseover: $parent.highlight} ">
+        <li data-bind="event: { click: $parent.highlight} ">
             <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements">
                 <div class="card__details flex-container ">
                     <div class="teal-text text-lighten-1 card__number " data-bind="text: '#' + ($index() + 1) "></div>
