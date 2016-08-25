@@ -4,9 +4,6 @@ var view = {
         $(document).ready(function() {
             self.favoriteCountElem = $('#favoriteCount');
             self.nearCountElem = $('#nearCount');
-            // $('.collapsible').collapsible({
-            //     accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-            // });
 
             var expanded = true;
             $('#collapsible-header').click(function() {
@@ -17,7 +14,6 @@ var view = {
                 });
             });
 
-            // $('select').material_select();
             $(".dropdown-button").dropdown();
 
             $('ul.tabs').tabs({
@@ -38,19 +34,9 @@ var view = {
             });
         });
     },
-
-    initCarousel: function() {
+    initCardElems: function() {
         $(document).ready(function() {
-            $('.carousel').carousel({
-                dist: 0,
-                shift: 0,
-                padding: 20
-            });
-        });
-    },
-    initTooltips: function() {
-        $(document).ready(function() {
-            $('.tooltipped').tooltip({ delay: 30 });
+            $('.materialboxed').materialbox();
         });
     },
     updateFavoriteCounter: function(placeName) {
@@ -62,5 +48,25 @@ var view = {
         this.nearCountElem.addClass('yellow lighten-3');
         var $toastContent = $('<span class="teal-text text-lighten-1"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites!</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
+    },
+    getNextPhoto: function(place, up) {
+        var $imageElem = $('#' + place.placeID);
+        var index = $imageElem.data('index');
+
+        if (up) {
+            ++index;
+            if (index >= place.photos.length) index = 0;
+        } else {
+            --index;
+            if (index < 0) index = place.photos.length - 1;
+        }
+
+        $imageElem.fadeOut(150, function() {
+            $(this).attr('src', place.photos[index]).bind('onreadystatechange load', function() {
+                if (this.complete) $(this).fadeIn(150);
+            });
+        });
+
+        $imageElem.data('index', index);
     }
 }

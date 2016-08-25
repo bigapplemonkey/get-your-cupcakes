@@ -244,12 +244,20 @@ li.active {
 }
 
 .card__gallery {
-    max-width: 150px;
-    max-height: 150px;
-    margin: 0;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+    position: relative;
 }
 
-.test {
+.card__gallery__controls {
+    position: absolute;
+    bottom: -30px;
+    left: calc(50% - 23px);
+    cursor: pointer;
+}
+
+.card__comments {
     width: 59%;
 }
 
@@ -306,7 +314,7 @@ li.active {
 }
 
 .card__comment,
-.card__comments,
+.card__comments__container,
 .card__contacts {
     width: 100%;
     line-height: 18px;
@@ -428,6 +436,12 @@ span.badge.card__price__text {
 
 .backdrop {
     /*background-color: purple;*/
+}
+
+.backdrop {
+    width: 100%;
+    height: 100%;
+    z-index: 1005;
 }
 
 

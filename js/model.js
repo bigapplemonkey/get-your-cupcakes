@@ -1,11 +1,4 @@
 var records = {
-    // initialPlaceQueries: [
-    //     { query: 'Billy\'s Bakery 9th Ave New York' },
-    //     { query: 'Empire Cake 8th Ave New York' },
-    //     { query: 'Magnolia Bakery Bleecker Street New York' },
-    //     { query: 'Molly\'s cupcakes  Bleecker Street New York' },
-    //     { query: 'Crumbs University Pl New York' }
-    // ],
     initialPlaces: [{
         placeID: "417c4200f964a520cd1d1fe3",
         address: ["184 9th Ave", "New York, NY 10011"],

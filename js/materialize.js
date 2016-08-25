@@ -1026,6 +1026,10 @@ if ($) {
           newHeight = windowHeight * 0.9;
         }
 
+        var elemWidth = $('.materialboxed').data('spam') ? $('.materialboxed').data('spam') : 500;
+		newWidth = elemWidth;
+		newHeight = elemWidth;
+
         // Animate image + set z-index
         if(origin.hasClass('responsive-img')) {
           origin.velocity({'max-width': newWidth, 'width': originalWidth}, {duration: 0, queue: false,

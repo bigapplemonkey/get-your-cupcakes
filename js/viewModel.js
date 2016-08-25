@@ -8,7 +8,6 @@ var ViewModel = function() {
                 self.initMarker(place);
             }
         );
-        sort(self.places, 'title');
     }
 
     self.getInitialPlacesIDs = function() {
@@ -23,42 +22,30 @@ var ViewModel = function() {
     self.initMarker = function(place, isNearByPlace) {
         var marker = createMarker(place, isNearByPlace);
         // Extending marker properties
-        marker.isShown = ko.computed(function() {
-            var placeID = place.placeID;
-            var placeName = place.name;
-            var filter = self.searchString().toLowerCase();
-            var isFavorite = $.inArray(placeID, self.favoriteLocations()) > -1;
-            var complainsWithFilter = filter ? placeName.toLowerCase().indexOf(filter) >= 0 : true
-            var inTab1 = self.isTab1Selected();
-
-            if (complainsWithFilter && isFavorite) {
-                return inTab1 ? true : false
-            } else if (complainsWithFilter && !isFavorite) {
-                return inTab1 ? false : true
-            }
-            return false;
-        });
         marker.address = place.address;
         marker.priceLevel = place.priceLevel ? place.priceLevel : null;
         marker.website = place.website;
         marker.categories = place.categories ? place.categories : null;
         marker.placeID = place.placeID;
-        marker.photos = ko.observableArray([]);
-        marker.rating = ko.observable(0);
-        marker.likes = ko.observable(0);
-        marker.priceLevel = ko.observable('');
-        marker.comments = ko.observableArray([]);
-        marker.review = ko.observable('');
-        marker.wifi = ko.observable(false);
-        marker.outdoorseating = ko.observable(false);
-        marker.delivery = ko.observable(false);
-        marker.creditcards = ko.observable(false);
-        marker.formattedPhone = ko.observable('');
-        marker.phone = ko.observable('');
-        marker.facebook = ko.observable('');
-        marker.twitter = ko.observable('');
+        marker.photos = [];
+        marker.rating = 0;
+        marker.likes = 0;
+        marker.priceLevel = '';
+        marker.comments = [];
+        marker.review = '';
+        marker.wifi = false;
+        marker.outdoorseating = false;
+        marker.delivery = false;
+        marker.creditcards = false;
+        marker.formattedPhone = '';
+        marker.phone = '';
+        marker.facebook = '';
+        marker.twitter = '';
+
         self.retrieveDetails(marker);
-        self.places.push(marker);
+
+        if (isNearByPlace) self.nearList.push(marker);
+        else self.favoriteList.push(marker);
     };
 
     self.retrieveDetails = function(place) {
@@ -74,20 +61,20 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            place.rating(result.response.venue.rating);
-            place.likes(result.response.venue.likes.count);
-            place.formattedPhone(result.response.venue.contact.formattedPhone);
-            place.phone(result.response.venue.contact.phone);
-            if (result.response.venue.contact.facebook) place.facebook(result.response.venue.contact.facebook);
-            if (result.response.venue.contact.twitter) place.twitter(result.response.venue.contact.twitter);
-            if (result.response.venue.price) place.priceLevel(result.response.venue.price.message);
+            place.rating = result.response.venue.rating;
+            place.likes = result.response.venue.likes.count;
+            place.formattedPhone = result.response.venue.contact.formattedPhone;
+            place.phone = result.response.venue.contact.phone;
+            if (result.response.venue.contact.facebook) place.facebook = result.response.venue.contact.facebook;
+            if (result.response.venue.contact.twitter) place.twitter = result.response.venue.contact.twitter;
+            if (result.response.venue.price) place.priceLevel = result.response.venue.price.message;
             if (result.response.venue.phrases) {
                 result.response.venue.phrases.forEach(
                     function(phrase) {
                         place.comments.push('"' + phrase.sample.text + '"');
                     }
                 );
-                place.review(place.comments()[0].length < 65 ? place.comments()[0] : (place.comments()[0].substring(0, 60) + '..."'));
+                place.review = place.comments[0].length < 65 ? place.comments[0] : (place.comments[0].substring(0, 60) + '..."');
             }
             if (result.response.venue.attributes) {
                 result.response.venue.attributes.groups.forEach(
@@ -97,7 +84,7 @@ var ViewModel = function() {
                             if (place.hasOwnProperty(propertyName)) {
                                 var value = item.displayValue.toLowerCase();
                                 if (value.indexOf('yes') >= 0 || value.indexOf('delivery') >= 0) {
-                                    place[propertyName](true);
+                                    place[propertyName] = true;
                                 }
                             }
                         });
@@ -107,11 +94,12 @@ var ViewModel = function() {
             if (result.response.venue.photos) {
                 result.response.venue.photos.groups[0].items.forEach(
                     function(photo) {
-                        place.photos.push(photo.prefix + '150x150' + photo.suffix);
+                        place.photos.push(photo.prefix + '500x500' + photo.suffix);
                     }
                 );
             }
-            // view.initCarousel(place.placeID);
+            self.initializedMarkerCount++;
+            if (self.placeCount && self.placeCount === self.initializedMarkerCount) self.isDataReady(true);
         }).fail(function(err) {
             console.log(err);
         });
@@ -121,30 +109,29 @@ var ViewModel = function() {
         self.sortBy(self.sortOptions[index]);
     };
 
-    self.showElement = function(elem) {
-        $(elem).hide().slideDown()
-    };
-    self.hideElement = function(elem) {
-        $(elem).slideUp(function() { $(elem).remove(); })
-    };
+    // self.showElement = function(elem) {
+    //     $(elem).hide().slideDown();
+    // };
 
-    self.highlight = function(place) {
-        displayInfobox(place);
-    };
+    // self.hideElement = function(elem) {
+    //     $(elem).slideUp(function() { $(elem).remove(); })
+    // };
 
     self.addToFavorites = function(place) {
-        self.favoriteLocations.push(place.placeID);
-        self.savePlace(place);
+        self.nearList.remove(place);
         switchIcon(place, true);
+        self.favoriteList.push(place);
+        self.savePlace(place);
         view.updateFavoriteCounter(place.title);
-    }
+    };
 
     self.removeFromFavorites = function(place) {
-        self.favoriteLocations.remove(place.placeID);
-        self.removePlace(place.placeID);
+        self.favoriteList.remove(place);
         switchIcon(place);
+        self.nearList.push(place);
+        self.removePlace(place.placeID);
         view.updateNearCounter(place.title);
-    }
+    };
 
     self.savePlace = function(place) {
         var newPlace = {
@@ -170,12 +157,9 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
-    self.initGalleries = function() {
-        view.initCarousel();
-    };
-
-    self.initViewElements = function() {
-        view.initTooltips();
+    self.initViewElements = function(place) {
+        view.initCardElems();
+        displayInfobox(place);
     };
 
     /* Static properties */
@@ -188,35 +172,22 @@ var ViewModel = function() {
     self.clientSecret = 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ';
     self.version = '20130815';
 
+    /* Non-observables */
+    self.placeCount = 0;
+    self.initializedMarkerCount = 0;
+
     /* Observables */
     self.searchString = ko.observable('');
     self.sortBy = ko.observable(self.sortOptions[0]);
     self.isTab1Selected = ko.observable(true);
-    self.favoriteLocations = ko.observableArray([]);
-    self.places = ko.observableArray([]);
+    self.isDataReady = ko.observable(false);
+    self.favoriteList = ko.observableArray([]);
+    self.nearList = ko.observableArray([]);
+    self.filteredFavoriteList = ko.observableArray([]);
+    self.filteredNearList = ko.observableArray([]);
 
     /* Computed */
-    self.visiblePlaces = ko.computed(function() {
-        closeInfoWindow();
-        var bounds = new google.maps.LatLngBounds();
-        var filteredArray = ko.utils.arrayFilter(self.places(), function(place) {
-            var isShown = place.isShown();
-            if (isShown) {
-                place.setVisible(true);
-                bounds.extend(place.position);
-            } else place.setVisible(false);
-            return isShown === true;
-        });
-        map.fitBounds(bounds);
-
-        sort(filteredArray, self.sortBy().optionValue);
-        if (filteredArray.length < 1) centerMap();
-        return filteredArray;
-    });
-
     ko.computed(function() {
-        console.log('here!!!!');
-
         var placeIDs = self.getInitialPlacesIDs();
         var venueURL = 'https://api.foursquare.com/v2/venues/search';
         venueURL += '?' + $.param({
@@ -232,6 +203,7 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
+            var validVenueCount = 0;
             result.response.venues.forEach(
                 function(venue) {
                     // console.log(venue);
@@ -244,36 +216,73 @@ var ViewModel = function() {
                             website: venue.url,
                             categories: venue.categories
                         }, true);
+                        validVenueCount++;
                     }
                 }
             );
+
+            self.placeCount = model.initialPlaces.length + validVenueCount;
 
         }).fail(function(err) {
             console.log(err);
         });
     });
 
-    /* Favorite locations init */
-    self.getInitialPlacesIDs().forEach(
-        function(place) {
-            self.favoriteLocations.push(place);
+    ko.computed(function() {
+        // self.isDataReady(false);
+        var searchString = self.searchString().toLowerCase();
+        var filteredArray = [];
+        var diffArray = [];
+        var showArray = [];
+        var hideArray = [];
+
+        if (self.isTab1Selected()) {
+            if (searchString) {
+                filteredArray = ko.utils.arrayFilter(self.favoriteList(), function(place) {
+                    var containsString = place.title.toLowerCase().indexOf(searchString) >= 0;
+                    if (!containsString) diffArray.push(place);
+                    return containsString;
+                });
+                sort(filteredArray, self.sortBy().optionValue);
+                self.filteredFavoriteList(filteredArray);
+                hideArray = diffArray.concat(self.filteredNearList());
+                showArray = filteredArray;
+            } else {
+                sort(self.favoriteList(), self.sortBy().optionValue);
+                self.filteredFavoriteList(self.favoriteList());
+                hideArray = self.filteredNearList();
+                showArray = self.filteredFavoriteList();
+            }
+        } else {
+            if (searchString) {
+                filteredArray = ko.utils.arrayFilter(self.nearList(), function(place) {
+                    var containsString = place.title.toLowerCase().indexOf(searchString) >= 0;
+                    if (!containsString) diffArray.push();
+                    return place.title.toLowerCase().indexOf(searchString) >= 0;
+                });
+                sort(filteredArray, self.sortBy().optionValue);
+                self.filteredNearList(filteredArray);
+                hideArray = diffArray.concat(self.filteredFavoriteList());
+                showArray = filteredArray;
+            } else {
+                sort(self.nearList(), self.sortBy().optionValue);
+                self.filteredNearList(self.nearList());
+                hideArray = self.filteredFavoriteList();
+                showArray = self.filteredNearList();
+            }
         }
-    );
+        displayMarkers(hideArray, showArray);
+        // self.isDataReady(true);
+    });
 };
 
 //helpers
 
 function sort(array, sortBy) {
-    if (array) {
-        if (sortBy === 'title') {
-            array.sort(function(l, r) {
-                return l[sortBy] > r[sortBy] ? 1 : -1
-            })
-        } else {
-            array.sort(function(l, r) {
-                return l[sortBy]() > r[sortBy]() ? 1 : -1
-            })
-        }
+    if (array && sortBy) {
+        array.sort(function(l, r) {
+            return l[sortBy] > r[sortBy] ? 1 : -1
+        })
     }
 }
 

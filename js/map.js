@@ -15,9 +15,9 @@
             maxZoom: 15,
             minZoom: 9,
             mapTypeControl: false
-            // mapTypeControlOptions: {
-            //     mapTypeIds: ['roadmap', 'map_style']
-            // }
+                // mapTypeControlOptions: {
+                //     mapTypeIds: ['roadmap', 'map_style']
+                // }
         });
         map.mapTypes.set('map_style', styledMap);
 
@@ -26,14 +26,32 @@
         defaultIcon = makeMarkerIcon('0091ff');
         highlightedIcon = makeMarkerIcon('FFFF24');
 
+        var infoWindow = new google.maps.InfoWindow({ map: map });
+        if (false) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Location found.');
+                    map.setCenter(pos);
+                }, function() {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                console.log('not found!');
+            }
+        }
+
         window.createMarker = createMarker;
         window.closeInfoWindow = closeInfoWindow;
         window.displayInfobox = displayInfobox;
         window.switchIcon = switchIcon;
-        window.centerMap = function() {
-            map.setCenter(center)
-            map.setZoom(13);
-        };
+        window.displayMarkers = displayMarkers;
         window.map = map;
     }
 
@@ -82,11 +100,12 @@
             map: map,
             position: place.point,
             title: place.name,
+            visible: false,
             animation: google.maps.Animation.DROP
         };
         var marker = new google.maps.Marker(markerConfig);
 
-        if(isNearByPlace) marker.setIcon(highlightedIcon);
+        if (isNearByPlace) marker.setIcon(highlightedIcon);
         else marker.setIcon(defaultIcon);
 
         addMarkerEvents(marker);
@@ -141,9 +160,34 @@
     }
 
     function switchIcon(marker, isDefault) {
-        if(isDefault)  marker.setIcon(defaultIcon);
-        else  marker.setIcon(highlightedIcon);
+        marker.setVisible(false);
+        if (isDefault) marker.setIcon(defaultIcon);
+        else marker.setIcon(highlightedIcon);
     }
+
+    function centerMap() {
+        map.setCenter(map.center)
+        map.setZoom(13);
+    }
+
+    function displayMarkers(markersToHide, markersToShow) {
+        closeInfoWindow();
+
+        markersToHide.forEach(function(marker) {
+            marker.setVisible(false);
+        });
+
+        if (markersToShow.length > 0) {
+
+            var bounds = new google.maps.LatLngBounds();
+            markersToShow.forEach(function(marker) {
+                marker.setVisible(true);
+                bounds.extend(marker.position);
+            });
+            map.fitBounds(bounds);
+        } else centerMap();
+
+    };
 
     window.initMap = initMap;
 
