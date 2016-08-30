@@ -17,6 +17,22 @@
 </head>
 
 <body>
+    <div id="loader-wrapper">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <img src="images/smily-cupcake_7.png" alt="" class="preloader__image">
+    </div>
     <div class="row navigation z-depth-1">
         <div class="col s12 logo">
             <h4 class="logo__title center-align">Cupcake finder!</h4>
@@ -79,7 +95,24 @@
     <main>
         <div id="map"></div>
     </main>
-    <!--List Template-->
+    <!-- Modal -->
+    <a class="modal-trigger" href="#modal1">Modal</a>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>
+                This map has been configured for
+                "<span data-bind="text: model.position.name"></span>". Would you like the map to be updated to your current location
+                "<span data-bind="text: googleMap.currentCenter.name"></span>"?
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" data-bind="click: keepCenter">No</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" data-bind="click: updateCenter">Yes</a>
+        </div>
+    </div>
+    <!-- List Template -->
     <script type="text/html" id="place-list">
         <li>
             <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements">
@@ -117,14 +150,18 @@
                         <i class="material-icons card__content__attribute teal-text text-lighten-1" data-bind="visible: outdoorseating ">beach_access</i>
                     </div>
                     <div class="card__contacts flex-container ">
+                        <!-- ko if: website -->
                         <div class="card__contacts__icon "><i class="material-icons ">web</i></div>
                         <div class="card__contacts__text ">
                             <a href="" target="_blank" data-bind="attr: { href: website}, text: website"></a>
                         </div>
+                        <!-- /ko -->
+                        <!-- ko if: phone -->
                         <div class="card__contacts__icon "><i class="material-icons ">phone</i></div>
                         <div class="card__contacts__text ">
                             <a href="" data-bind="attr: { href: 'tel:+1' + phone}, text: formattedPhone"></a>
                         </div>
+                        <!-- /ko -->
                         <div class="card__contacts__social">
                             <a href="" target="_blank" data-bind="visible: facebook, attr: { href: 'http://facebook.com/' + facebook} "><span class="social-icon zocial-facebook"></span></a>
                             <a href="" target="_blank" data-bind="visible: twitter, attr: { href: 'http://twitter.com/' + twitter}"><span class="social-icon zocial-twitter"></span></a>
@@ -163,7 +200,7 @@
     <script src="js/viewModel.js "></script>
     <script src="js/map.js "></script>
     <!--Import Google Map API -->
-    <script asyn src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap "></script>
+    <script asyn src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap "></script>
 </body>
 
 </html>

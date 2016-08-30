@@ -1,4 +1,8 @@
 var records = {
+    position: {
+        center: { lat: 40.7413549, lng: -73.9980244 },
+        name: "New York, New York, United States"
+    },
     initialPlaces: [{
         placeID: "417c4200f964a520cd1d1fe3",
         address: ["184 9th Ave", "New York, NY 10011"],

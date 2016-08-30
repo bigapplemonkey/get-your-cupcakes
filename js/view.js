@@ -18,7 +18,7 @@ var view = {
 
             $('ul.tabs').tabs({
                 onShow: function(elem) {
-                    closeInfoWindow();
+                    googleMap.closeInfoWindow();
                     var selectedTab = elem[0].id;
                     viewModel.searchString('');
                     $('input').blur();

@@ -20,7 +20,7 @@ var ViewModel = function() {
     };
 
     self.initMarker = function(place, isNearByPlace) {
-        var marker = createMarker(place, isNearByPlace);
+        var marker = googleMap.createMarker(place, isNearByPlace);
         // Extending marker properties
         marker.address = place.address;
         marker.priceLevel = place.priceLevel ? place.priceLevel : null;
@@ -42,13 +42,14 @@ var ViewModel = function() {
         marker.facebook = '';
         marker.twitter = '';
 
-        self.retrieveDetails(marker);
-
-        if (isNearByPlace) self.nearList.push(marker);
-        else self.favoriteList.push(marker);
+        self.retrieveDetails(marker, function() {
+            if (isNearByPlace) {
+                if (marker.photos.length > 0 && marker.comments.length > 0) self.nearList.push(marker);
+            } else self.favoriteList.push(marker);
+        });
     };
 
-    self.retrieveDetails = function(place) {
+    self.retrieveDetails = function(place, callback) {
         var detailsURL = 'https://api.foursquare.com/v2/venues/' + place.placeID;
         detailsURL += '?' + $.param({
             'client_id': self.clientID,
@@ -61,7 +62,7 @@ var ViewModel = function() {
             method: 'GET',
             dataType: 'json'
         }).done(function(result) {
-            place.rating = result.response.venue.rating;
+            place.rating = result.response.venue.rating ? result.response.venue.rating : 0;
             place.likes = result.response.venue.likes.count;
             place.formattedPhone = result.response.venue.contact.formattedPhone;
             place.phone = result.response.venue.contact.phone;
@@ -91,7 +92,7 @@ var ViewModel = function() {
                     }
                 );
             }
-            if (result.response.venue.photos) {
+            if (result.response.venue.photos.groups.length > 0) {
                 result.response.venue.photos.groups[0].items.forEach(
                     function(photo) {
                         place.photos.push(photo.prefix + '500x500' + photo.suffix);
@@ -99,7 +100,11 @@ var ViewModel = function() {
                 );
             }
             self.initializedMarkerCount++;
-            if (self.placeCount && self.placeCount === self.initializedMarkerCount) self.isDataReady(true);
+            if (self.placeCount && self.placeCount === self.initializedMarkerCount) {
+                self.isDataReady(true);
+                $("#loader-wrapper").fadeOut("slow");
+            }
+            callback();
         }).fail(function(err) {
             console.log(err);
         });
@@ -119,7 +124,7 @@ var ViewModel = function() {
 
     self.addToFavorites = function(place) {
         self.nearList.remove(place);
-        switchIcon(place, true);
+        googleMap.switchIcon(place, true);
         self.favoriteList.push(place);
         self.savePlace(place);
         view.updateFavoriteCounter(place.title);
@@ -127,7 +132,7 @@ var ViewModel = function() {
 
     self.removeFromFavorites = function(place) {
         self.favoriteList.remove(place);
-        switchIcon(place);
+        googleMap.switchIcon(place);
         self.nearList.push(place);
         self.removePlace(place.placeID);
         view.updateNearCounter(place.title);
@@ -157,10 +162,29 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
+    self.saveModel = function() {
+        localStorage.favoritePlaces = JSON.stringify(model);
+    };
+
     self.initViewElements = function(place) {
         view.initCardElems();
-        displayInfobox(place);
+        googleMap.displayInfobox(place);
     };
+
+    self.updateCenter = function() {
+        model.position = {
+            center: googleMap.currentCenter.center,
+            name: googleMap.currentCenter.name
+        }
+        model.initialPlaces = [];
+        localStorage.favoritePlaces = JSON.stringify(model);
+        googleMap.centerMap(googleMap.currentCenter.center);
+        self.initApp(self);
+    }
+
+    self.keepCenter = function() {
+        self.initApp(self);
+    }
 
     /* Static properties */
     self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' },
@@ -187,93 +211,95 @@ var ViewModel = function() {
     self.filteredNearList = ko.observableArray([]);
 
     /* Computed */
-    ko.computed(function() {
-        var placeIDs = self.getInitialPlacesIDs();
-        var venueURL = 'https://api.foursquare.com/v2/venues/search';
-        venueURL += '?' + $.param({
-            'client_id': self.clientID,
-            'client_secret': self.clientSecret,
-            'v': self.version,
-            'll': '40.7,-74',
-            'categoryId': '4bf58dd8d48988d1bc941735'
-        });
+    self.initComputed = function() {
+        ko.computed(function() {
+            var centerString = model.position.center.lat + ',' + model.position.center.lng;
+            var placeIDs = self.getInitialPlacesIDs();
+            var venueURL = 'https://api.foursquare.com/v2/venues/search';
+            venueURL += '?' + $.param({
+                'client_id': self.clientID,
+                'client_secret': self.clientSecret,
+                'v': self.version,
+                'll': centerString,
+                'categoryId': '4bf58dd8d48988d1bc941735'
+            });
 
-        $.ajax({
-            url: venueURL,
-            method: 'GET',
-            dataType: 'json'
-        }).done(function(result) {
-            var validVenueCount = 0;
-            result.response.venues.forEach(
-                function(venue) {
-                    // console.log(venue);
-                    if (!placeIDs.includes(venue.id)) {
-                        self.initMarker({
-                            placeID: venue.id,
-                            point: { lat: venue.location.lat, lng: venue.location.lng },
-                            name: venue.name,
-                            address: [venue.location.formattedAddress[0], venue.location.formattedAddress[1]],
-                            website: venue.url,
-                            categories: venue.categories
-                        }, true);
-                        validVenueCount++;
+            $.ajax({
+                url: venueURL,
+                method: 'GET',
+                dataType: 'json'
+            }).done(function(result) {
+                var validVenueCount = 0;
+                result.response.venues.forEach(
+                    function(venue) {
+                        if (!placeIDs.includes(venue.id)) {
+                            self.initMarker({
+                                placeID: venue.id,
+                                point: { lat: venue.location.lat, lng: venue.location.lng },
+                                name: venue.name,
+                                address: [venue.location.formattedAddress[0], venue.location.formattedAddress[1]],
+                                website: venue.url,
+                                categories: venue.categories
+                            }, true);
+                            validVenueCount++;
+                        }
                     }
-                }
-            );
+                );
 
-            self.placeCount = model.initialPlaces.length + validVenueCount;
+                self.placeCount = model.initialPlaces.length + validVenueCount;
 
-        }).fail(function(err) {
-            console.log(err);
+            }).fail(function(err) {
+                console.log(err);
+            });
         });
-    });
 
-    ko.computed(function() {
-        // self.isDataReady(false);
-        var searchString = self.searchString().toLowerCase();
-        var filteredArray = [];
-        var diffArray = [];
-        var showArray = [];
-        var hideArray = [];
+        ko.computed(function() {
+            // self.isDataReady(false);
+            var searchString = self.searchString().toLowerCase();
+            var filteredArray = [];
+            var diffArray = [];
+            var showArray = [];
+            var hideArray = [];
 
-        if (self.isTab1Selected()) {
-            if (searchString) {
-                filteredArray = ko.utils.arrayFilter(self.favoriteList(), function(place) {
-                    var containsString = place.title.toLowerCase().indexOf(searchString) >= 0;
-                    if (!containsString) diffArray.push(place);
-                    return containsString;
-                });
-                sort(filteredArray, self.sortBy().optionValue);
-                self.filteredFavoriteList(filteredArray);
-                hideArray = diffArray.concat(self.filteredNearList());
-                showArray = filteredArray;
+            if (self.isTab1Selected()) {
+                if (searchString) {
+                    filteredArray = ko.utils.arrayFilter(self.favoriteList(), function(place) {
+                        var containsString = place.title.toLowerCase().indexOf(searchString) >= 0;
+                        if (!containsString) diffArray.push(place);
+                        return containsString;
+                    });
+                    sort(filteredArray, self.sortBy().optionValue);
+                    self.filteredFavoriteList(filteredArray);
+                    hideArray = diffArray.concat(self.filteredNearList());
+                    showArray = filteredArray;
+                } else {
+                    sort(self.favoriteList(), self.sortBy().optionValue);
+                    self.filteredFavoriteList(self.favoriteList());
+                    hideArray = self.filteredNearList();
+                    showArray = self.filteredFavoriteList();
+                }
             } else {
-                sort(self.favoriteList(), self.sortBy().optionValue);
-                self.filteredFavoriteList(self.favoriteList());
-                hideArray = self.filteredNearList();
-                showArray = self.filteredFavoriteList();
+                if (searchString) {
+                    filteredArray = ko.utils.arrayFilter(self.nearList(), function(place) {
+                        var containsString = place.title.toLowerCase().indexOf(searchString) >= 0;
+                        if (!containsString) diffArray.push(place);
+                        return place.title.toLowerCase().indexOf(searchString) >= 0;
+                    });
+                    sort(filteredArray, self.sortBy().optionValue);
+                    self.filteredNearList(filteredArray);
+                    hideArray = diffArray.concat(self.filteredFavoriteList());
+                    showArray = filteredArray;
+                } else {
+                    sort(self.nearList(), self.sortBy().optionValue);
+                    self.filteredNearList(self.nearList());
+                    hideArray = self.filteredFavoriteList();
+                    showArray = self.filteredNearList();
+                }
             }
-        } else {
-            if (searchString) {
-                filteredArray = ko.utils.arrayFilter(self.nearList(), function(place) {
-                    var containsString = place.title.toLowerCase().indexOf(searchString) >= 0;
-                    if (!containsString) diffArray.push();
-                    return place.title.toLowerCase().indexOf(searchString) >= 0;
-                });
-                sort(filteredArray, self.sortBy().optionValue);
-                self.filteredNearList(filteredArray);
-                hideArray = diffArray.concat(self.filteredFavoriteList());
-                showArray = filteredArray;
-            } else {
-                sort(self.nearList(), self.sortBy().optionValue);
-                self.filteredNearList(self.nearList());
-                hideArray = self.filteredFavoriteList();
-                showArray = self.filteredNearList();
-            }
-        }
-        displayMarkers(hideArray, showArray);
-        // self.isDataReady(true);
-    });
+            googleMap.displayMarkers(hideArray, showArray);
+            // self.isDataReady(true);
+        });
+    };
 };
 
 //helpers
@@ -289,7 +315,7 @@ function sort(array, sortBy) {
 function whenAvailable(name, callback) {
     var interval = 10; // ms
     window.setTimeout(function() {
-        if (window[name]) {
+        if (window[name] && typeof window[name] !== "undefined") {
             callback();
         } else {
             window.setTimeout(arguments.callee, interval);
@@ -297,10 +323,18 @@ function whenAvailable(name, callback) {
     }, interval);
 }
 
-whenAvailable("map", function() {
-    var viewModel = new ViewModel();
-    window.viewModel = viewModel;
+function initApp(viewModel) {
     viewModel.initPlaces();
+    viewModel.initComputed();
+    window.viewModel = viewModel;
     view.init();
+}
+
+whenAvailable("googleMap", function() {
+    var viewModel = new ViewModel();
     ko.applyBindings(viewModel);
+    if (!googleMap.currentCenter.inRatio) {
+        $('#modal1').openModal();
+        viewModel.initApp = initApp;
+    } else initApp(viewModel);
 });

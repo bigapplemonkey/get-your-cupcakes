@@ -53,7 +53,6 @@ main {
     display: flex;
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
-    height: 100%;
 }
 
 .font-grey {
@@ -70,7 +69,6 @@ main {
 
 .social-icon {
     margin-right: 15px;
-    /*color: #7e7e7e*/
 }
 
 
@@ -444,6 +442,36 @@ span.badge.card__price__text {
     z-index: 1005;
 }
 
+#loader-wrapper {
+    background-color: #D3D3D3;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    position: fixed;
+}
+
+.preloader-wrapper.big {
+    margin: 0 auto;
+    z-index: 1005;
+    position: absolute;
+    width: 92px;
+    height:92px;
+    top: calc(50% - 46px);
+    left: calc(50% - 46px);
+
+}
+
+
+.preloader__image {
+    max-width: 68px;
+    position: absolute;
+    top: calc(50% - 34px);
+    left: calc(50% - 34px);
+}
+
+.modal-trigger {
+    display: none;
+}
 
 /************ Map ************/
 

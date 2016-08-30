@@ -728,12 +728,12 @@ if ($) {
       $body.width(oldWidth);
 
       var defaults = {
-        opacity: 0.5,
+        opacity: 0,
         in_duration: 350,
         out_duration: 250,
         ready: undefined,
         complete: undefined,
-        dismissible: true,
+        dismissible: false,
         starting_top: '4%',
         ending_top: '10%'
       };

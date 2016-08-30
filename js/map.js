@@ -1,6 +1,12 @@
 // Whole-script strict mode syntax
 "use strict";
 
+// [
+//                         [34.0522, -118.2437],
+//                         [41.8781, -87.6298],
+//                         [25.7617, -80.1918]
+//                     ] 14700
+
 (function() {
     var map,
         largeInfowindow,
@@ -9,7 +15,8 @@
     function initMap() {
         var styles = [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#7562ab" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#000000" }, { "lightness": 16 }] }, { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 17 }, { "weight": 1.2 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": "17" }, { "saturation": "-48" }] }, { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 21 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#4c3775" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#513b90" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#211b34" }, { "lightness": 16 }] }, { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 19 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#0f252e" }, { "lightness": 17 }] }];
         var styledMap = new google.maps.StyledMapType(styles, { name: "Styled Map" });
-        var center = { lat: 40.7413549, lng: -73.9980244 };
+        var center = model.position.center;
+
         map = new google.maps.Map($('#map')[0], {
             center: center,
             maxZoom: 15,
@@ -19,6 +26,7 @@
                 //     mapTypeIds: ['roadmap', 'map_style']
                 // }
         });
+
         map.mapTypes.set('map_style', styledMap);
 
         largeInfowindow = new google.maps.InfoWindow();
@@ -27,32 +35,20 @@
         highlightedIcon = makeMarkerIcon('FFFF24');
 
         var infoWindow = new google.maps.InfoWindow({ map: map });
-        if (false) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
 
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent('Location found.');
-                    map.setCenter(pos);
-                }, function() {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                console.log('not found!');
-            }
+        var googleMap = {
+            createMarker: createMarker,
+            displayInfobox: displayInfobox,
+            switchIcon: switchIcon,
+            displayMarkers: displayMarkers,
+            closeInfoWindow: closeInfoWindow,
+            centerMap: centerMap
         }
 
-        window.createMarker = createMarker;
-        window.closeInfoWindow = closeInfoWindow;
-        window.displayInfobox = displayInfobox;
-        window.switchIcon = switchIcon;
-        window.displayMarkers = displayMarkers;
-        window.map = map;
+        getCurrentCenter(center, function(result, status) {
+            googleMap.currentCenter = result;
+            window.googleMap = googleMap;
+        });
     }
 
     function pinPoster(locations) {
@@ -165,9 +161,9 @@
         else marker.setIcon(highlightedIcon);
     }
 
-    function centerMap() {
-        map.setCenter(map.center)
-        map.setZoom(13);
+    function centerMap(center) {
+        map.setCenter(center ? center : map.center)
+        map.setZoom(10);
     }
 
     function displayMarkers(markersToHide, markersToShow) {
@@ -188,6 +184,90 @@
         } else centerMap();
 
     };
+
+    function getLocationFormattedString(point, callback) {
+        var geocoder = new google.maps.Geocoder;
+        geocoder.geocode({ 'location': point }, function(results, status) {
+            if (status === 'OK') {
+                if (results[1]) {
+                    var country = null,
+                        city = null,
+                        state = null;
+                    var c, lc, component;
+                    for (var r = 0, rl = results.length; r < rl; r += 1) {
+                        var result = results[r];
+
+                        if (!city && result.types[0] === 'locality') {
+                            for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                                component = result.address_components[c];
+
+                                if (component.types[0] === 'locality') {
+                                    city = component.long_name;
+                                    break;
+                                }
+                            }
+                        } else if (!state && result.types[0] === 'administrative_area_level_1') {
+                            for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                                component = result.address_components[c];
+
+                                if (component.types[0] === 'administrative_area_level_1' &&
+                                    component.types[1] === 'political') {
+                                    state = component.long_name;
+                                    break;
+                                }
+                            }
+                        } else if (!country && result.types[0] === 'country') {
+                            country = result.address_components[0].long_name;
+                        }
+
+                        if (city && country) {
+                            break;
+                        }
+                    }
+
+                    callback(city + ", " + state + ", " + country, 'OK');
+                }
+            } else {
+                callback(undefined, status);
+            }
+        });
+
+    }
+
+    function getCurrentCenter(modelCenter, callback) {
+        var currentPosition = null;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: 25.7617, //position.coords.latitude,
+                    lng: -80.1918 //position.coords.longitude
+                };
+
+                currentPosition = {
+                    center: pos,
+                    inRatio: true
+                }
+
+                var newCenter = new google.maps.LatLng(pos.lat, pos.lng);
+                var previousCenter = new google.maps.LatLng(modelCenter.lat, modelCenter.lng);
+                var distance = google.maps.geometry.spherical.computeDistanceBetween(previousCenter, newCenter);
+
+                if (distance > 14700) {
+                    currentPosition.inRatio = false;
+                }
+
+                getLocationFormattedString(pos, function(result, status) {
+                    currentPosition.name = result;
+                    callback(currentPosition, 'OK');
+                });
+
+            }, function() {
+                callback(undefined, 'ERROR');
+            });
+        } else {
+            callback(undefined, 'NOT_SUPPORTED');
+        }
+    }
 
     window.initMap = initMap;
 
