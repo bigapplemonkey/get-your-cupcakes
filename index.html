@@ -33,52 +33,53 @@
         </div>
         <img src="images/smily-cupcake_7.png" alt="" class="preloader__image">
     </div>
-    <div class="row navigation z-depth-1">
-        <div class="col s12 logo">
-            <h4 class="logo__title center-align">Cupcake finder!</h4>
-            <nav class="search red lighten-4">
-                <div class="nav-wrapper">
-                    <form>
+    <div class="row navigation z-depth-1 blue lighten-2">
+        <div class="col s12 logo flex-container">
+            <img src="images/smily-cupcake_7.png" alt="" class="logo__image">
+            <h4 class="logo__title right-align">Cupcake finder!</h4>
+            <div class="test">
+                <nav class="search">
+                    <div class="nav-wrapper">
                         <div class="input-field">
                             <input id="search" type="search" data-bind="value: searchString, valueUpdate: 'keyup'" required>
                             <label for="search"><i class="material-icons">search</i></label>
-                            <i class="material-icons">close</i>
+                            <!-- <i class="material-icons">close</i> -->
                         </div>
-                    </form>
-                </div>
-            </nav>
+                    </div>
+                </nav>
+            </div>
         </div>
         <div class="col s12 accordion">
             <ul class="collapsible navigation__content z-depth-0" data-collapsible="accordion">
-                <li>
+                <li class="z-depth-0">
                     <div id="collapsible-header" class="collapsible-header active navigation__content__header">
                         <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
                     </div>
-                    <div class="collapsible-body navigation__content__body grey lighten-4">
+                    <div id="ladilla2" class="collapsible-body navigation__content__body grey lighten-4">
                         <!-- Dropdown Structure -->
                         <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
                             <li>
-                                <a href="#" data-bind="text: $data.optionDisplay, click: $parent.sortPlacesBy($index())"></a>
+                                <a class="pink-text text-lighten-2" href="#" data-bind="text: $data.optionDisplay, click: function(){ $parent.sortPlacesBy($index());}"></a>
                             </li>
                         </ul>
                         <div class="navbar-fixed">
-                            <nav class="red lighten-4">
+                            <nav class="blue lighten-2 z-depth-0">
                                 <div class="nav-wrapper">
                                     <ul class="right">
                                         <li class="navigation__tabs">
-                                            <ul class="tabs red lighten-4">
+                                            <ul class="tabs blue lighten-2">
                                                 <li class="tab"><a class="active" href="#favorites">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteList().length"></div></a></li>
                                                 <li class="tab"><a href="#near">Near By<div  id="nearCount" class="chip" data-bind="text: nearList().length"></div></a></li>
                                             </ul>
                                         </li>
-                                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Sort By<i class="material-icons right">arrow_drop_down</i></a></li>
+                                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">SORT BY<i class="material-icons right">arrow_drop_down</i></a></li>
                                     </ul>
                                 </div>
                             </nav>
                         </div>
                         <div class="gray backdrop" data-bind="visible: !isDataReady()"></div>
                         <div id="favorites" class="col s12 grey lighten-5">
-                            <ul class="collapsible" data-collapsible="accordion" data-bind="template: {if: isDataReady, name: 'place-list', foreach: filteredFavoriteList}">
+                            <ul id="ladilla" class="collapsible" data-collapsible="accordion" data-bind="template: {if: isDataReady, name: 'place-list', foreach: filteredFavoriteList}">
                             </ul>
                         </div>
                         <div id="near" class="col s12 grey lighten-5">
@@ -102,9 +103,9 @@
         <div class="modal-content">
             <h4>Modal Header</h4>
             <p>
-                This map has been configured for
-                "<span data-bind="text: model.position.name"></span>". Would you like the map to be updated to your current location
-                "<span data-bind="text: googleMap.currentCenter.name"></span>"?
+                This map has been configured for "
+                <span data-bind="text: model.position.name"></span>". Would you like the map to be updated to your current location "
+                <span data-bind="text: googleMap.currentCenter.name"></span>"?
             </p>
         </div>
         <div class="modal-footer">
@@ -114,23 +115,32 @@
     </div>
     <!-- List Template -->
     <script type="text/html" id="place-list">
-        <li>
-            <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements">
+        <li data-bind="attr: {id: placeID + '_listElem'}">
+            <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements, attr: {id: placeID + '_listHeader', 'data-index': $index}">
+                <img class="card__image " src=" " alt="Cupcake store " data-bind="attr: {src: photos[0]} ">
                 <div class="card__details flex-container ">
-                    <div class="teal-text text-lighten-1 card__number " data-bind="text: '#' + ($index() + 1) "></div>
-                    <h5 class="font-grey card__title " data-bind="text: title "></h5>
-                    <a class="btn-floating teal lighten-1" data-bind="visible: $parent.isTab1Selected, click: $parent.removeFromFavorites"><i class="material-icons">remove</i></a>
-                    <a class="btn-floating teal lighten-1" data-bind="visible: !$parent.isTab1Selected(), click: $parent.addToFavorites "><i class="material-icons">add</i></a>
-                    <div class="card__number"></div>
+                    <!-- <div class="teal-text text-lighten-1 card__number " data-bind="text: '#' + ($index() + 1) "></div> -->
+                    <h5 class="font-grey card__title ">
+                      <span class="pink-text text-lighten-2" data-bind="text: '#' + ($index() + 1) + ' '"></span>
+                      <span data-bind="text: title"></span>
+                    </h5>
+                    <a class="btn-floating pink lighten-2" data-bind="visible: $parent.isTab1Selected, click: $parent.removeFromFavorites"><i class="material-icons">remove</i></a>
+                    <a class="btn-floating pink lighten-2" data-bind="visible: !$parent.isTab1Selected(), click: $parent.addToFavorites "><i class="material-icons">add</i></a>
+                    <!--  <div class="card__number"></div> -->
                     <div class="card__ratings ">
-                        <span class="red-text text-lighten-2 " data-bind="text: rating.toFixed(1) "></span><span class="font-grey "> Rating | </span>
-                        <span class="teal-text text-lighten-1 " data-bind="text: likes "></span><span class="font-grey "> Likes </span>
+                        <span data-bind="text: rating.toFixed(1) "></span><span class="font-grey "> Rating | </span>
+                        <span data-bind="text: likes "></span><span class="font-grey "> Likes </span>
                     </div>
-                    <div class="card__price ">
+                    <div class="card__price blue-text">
                         <!-- ko if: priceLevel -->
-                        <span class="card__price__text badge z-depth-1 " data-bind="html: priceLevel + '<i class=&quot;card__price__icon material-icons&quot;>attach_money</i>' "></span>
+                        $ <span data-bind="text: priceLevel"></span>
                         <!-- /ko -->
                     </div>
+                    <!-- <div class="card__price "> -->
+                    <!-- ko if: priceLevel -->
+                    <!-- <span class="card__price__text badge z-depth-1 " data-bind="html: priceLevel + '<i class=&quot;card__price__icon material-icons&quot;>attach_money</i>' "></span> -->
+                    <!-- /ko -->
+                    <!-- </div> -->
                     <div class="card__comment flex-container ">
                         <!-- ko if: review -->
                         <div class="card__comment__icon "><i class="material-icons ">account_circle</i></div>
@@ -138,28 +148,27 @@
                         <!-- /ko -->
                     </div>
                 </div>
-                <img class="card__image " src=" " alt="Cupcake store " data-bind="attr: {src: photos[0]} ">
             </div>
             <div class="collapsible-body card__content">
                 <div class="flex-container">
                     <div class="card__content__address" data-bind="html: address[0] + '<br>' + address[1] "></div>
                     <div class="card__content__attributes">
-                        <i class="material-icons card__content__attribute teal-text text-lighten-1" data-bind="visible: creditcards ">credit_card</i>
-                        <i class="material-icons card__content__attribute teal-text text-lighten-1" data-bind="visible: wifi ">wifi</i>
-                        <i class="material-icons card__content__attribute teal-text text-lighten-1" data-bind="visible: delivery ">local_shipping</i>
-                        <i class="material-icons card__content__attribute teal-text text-lighten-1" data-bind="visible: outdoorseating ">beach_access</i>
+                        <i class="material-icons card__content__attribute pink-text text-lighten-2" data-bind="visible: creditcards ">credit_card</i>
+                        <i class="material-icons card__content__attribute pink-text text-lighten-2" data-bind="visible: wifi ">wifi</i>
+                        <i class="material-icons card__content__attribute pink-text text-lighten-2" data-bind="visible: delivery ">local_shipping</i>
+                        <i class="material-icons card__content__attribute pink-text text-lighten-2" data-bind="visible: outdoorseating ">beach_access</i>
                     </div>
                     <div class="card__contacts flex-container ">
                         <!-- ko if: website -->
                         <div class="card__contacts__icon "><i class="material-icons ">web</i></div>
                         <div class="card__contacts__text ">
-                            <a href="" target="_blank" data-bind="attr: { href: website}, text: website"></a>
+                            <a class="font-dark-grey" href="" target="_blank" data-bind="attr: { href: website}, text: website"></a>
                         </div>
                         <!-- /ko -->
                         <!-- ko if: phone -->
                         <div class="card__contacts__icon "><i class="material-icons ">phone</i></div>
                         <div class="card__contacts__text ">
-                            <a href="" data-bind="attr: { href: 'tel:+1' + phone}, text: formattedPhone"></a>
+                            <a class="font-dark-grey" href="" data-bind="attr: { href: 'tel:+1' + phone}, text: formattedPhone"></a>
                         </div>
                         <!-- /ko -->
                         <div class="card__contacts__social">
@@ -179,8 +188,8 @@
                     <div class="card__gallery">
                         <img class="materialboxed card__gallery" data-spam="500" src=" " alt="Cupcake store " data-bind="attr: {src: photos[1], 'data-index': 1, id: placeID} ">
                         <div class="center-align card__gallery__controls">
-                            <i class="material-icons teal-text text-lighten-1" data-bind="click: view.getNextPhoto($data, false)">navigate_before</i>
-                            <i class="material-icons teal-text text-lighten-1" data-bind="click: view.getNextPhoto($data, true)">navigate_next</i>
+                            <i class="material-icons pink-text text-lighten-2" data-bind="click: view.getNextPhoto($data, false)">navigate_before</i>
+                            <i class="material-icons pink-text text-lighten-2" data-bind="click: view.getNextPhoto($data, true)">navigate_next</i>
                         </div>
                     </div>
                 </div>

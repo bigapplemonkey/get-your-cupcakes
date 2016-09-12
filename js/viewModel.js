@@ -75,7 +75,7 @@ var ViewModel = function() {
                         place.comments.push('"' + phrase.sample.text + '"');
                     }
                 );
-                place.review = place.comments[0].length < 65 ? place.comments[0] : (place.comments[0].substring(0, 60) + '..."');
+                place.review = place.comments[0].length < 70 ? place.comments[0] : (place.comments[0].substring(0, 65) + '..."');
             }
             if (result.response.venue.attributes) {
                 result.response.venue.attributes.groups.forEach(

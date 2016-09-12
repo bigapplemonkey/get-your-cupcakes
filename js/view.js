@@ -68,5 +68,15 @@ var view = {
         });
 
         $imageElem.data('index', index);
+    },
+    showInList: function(placeID) {
+        var $listHeader = $('#' + placeID + '_listHeader');
+        var $listElem = $('#' + placeID + '_listElem');
+
+        var index = $listHeader.data('index');
+        $("#ladilla2").animate({
+            scrollTop: (140 * index) - 10
+        }, 800);
+        if (!$listElem.hasClass('active')) $listHeader.trigger('click');
     }
 }
