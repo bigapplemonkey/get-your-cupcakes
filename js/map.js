@@ -238,7 +238,7 @@
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
             infowindow.marker = marker;
-            infowindow.setContent('<div class="flex-container"><img class="info__image" src="../images/smily-cupcake35.png" alt=""><h5 class="info__title">' + marker.title + '</h5></div>');
+            infowindow.setContent('<div class="flex-container"><img class="info__image" src="images/smily-cupcake35.png" alt=""><h5 class="info__title">' + marker.title + '</h5></div>');
             infowindow.open(map, marker);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick', function() {
