@@ -102,11 +102,12 @@ var ViewModel = function() {
             self.initializedMarkerCount++;
             if (self.placeCount && self.placeCount === self.initializedMarkerCount) {
                 self.isDataReady(true);
-                $("#loader-wrapper").fadeOut("slow");
+                //  self.errorMessage('Trouble trouble trouble');
+                if (!self.errorMessage()) $("#loader-wrapper").fadeOut("slow");
             }
             callback();
         }).fail(function(err) {
-            console.log(err);
+            self.errorHandling('We\'re currently experiencing connectivity issues with Foursquare. Please try again later.');
         });
     };
 
@@ -180,17 +181,32 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
         googleMap.centerMap(googleMap.currentCenter.center);
         self.initApp(self);
-    }
+    };
 
     self.keepCenter = function() {
         self.initApp(self);
-    }
+    };
+
+    self.showNotFound = function() {
+        //(searchString() && (filteredFavoriteList().length === 0 || filteredNearList().length === 0))
+        if (self.searchString().length > 0) {
+            if (self.isTab1Selected()) {
+                return (self.favoriteList().length > 0 && self.filteredFavoriteList().length === 0);
+            } else return (self.nearList().length > 0 && self.filteredNearList().length === 0);
+        }
+        return false;
+    };
+
+    self.errorHandling = function(message) {
+        self.errorMessage(message);
+        view.displayError(message);
+    };
 
     /* Static properties */
     self.sortOptions = [{ optionDisplay: 'Name', optionValue: 'title' },
-        { optionDisplay: 'Price', optionValue: 'priceLevel' },
-        { optionDisplay: 'Likes', optionValue: 'likes' },
-        { optionDisplay: 'Rating', optionValue: 'rating' }
+        { optionDisplay: 'Price&nbsp;&nbsp;&uarr;', optionValue: 'priceLevel' },
+        { optionDisplay: 'Likes&nbsp;&nbsp;&darr;', optionValue: 'likes' },
+        { optionDisplay: 'Rating&nbsp;&nbsp;&darr;', optionValue: 'rating' }
     ];
     self.clientID = 'RNGS24CFZIIKKPYYVPWTQSNTGQIBR5D3IV1MULITVHRT1RDE';
     self.clientSecret = 'D0YLUV1MSDS2NYGKCFJ332CFDOIDIYVRO1ERUS4S5UJF1GTJ';
@@ -201,6 +217,7 @@ var ViewModel = function() {
     self.initializedMarkerCount = 0;
 
     /* Observables */
+    self.errorMessage = ko.observable('');
     self.searchString = ko.observable('');
     self.sortBy = ko.observable(self.sortOptions[0]);
     self.isTab1Selected = ko.observable(true);
@@ -249,7 +266,7 @@ var ViewModel = function() {
                 self.placeCount = model.initialPlaces.length + validVenueCount;
 
             }).fail(function(err) {
-                console.log(err);
+                self.errorHandling('We\'re currently experiencing connectivity issues with Foursquare. Please try again later.');
             });
         });
 
@@ -305,9 +322,11 @@ var ViewModel = function() {
 //helpers
 
 function sort(array, sortBy) {
+    var trueValue = 1;
+    if (['likes', 'rating'].indexOf(sortBy) > -1) trueValue = trueValue * -1;
     if (array && sortBy) {
         array.sort(function(l, r) {
-            return l[sortBy] > r[sortBy] ? 1 : -1
+            return l[sortBy] > r[sortBy] ? trueValue : -trueValue
         })
     }
 }
@@ -330,11 +349,21 @@ function initApp(viewModel) {
     view.init();
 }
 
-whenAvailable("googleMap", function() {
-    var viewModel = new ViewModel();
-    ko.applyBindings(viewModel);
-    if (!googleMap.currentCenter.inRatio) {
-        $('#modal1').openModal();
-        viewModel.initApp = initApp;
-    } else initApp(viewModel);
-});
+$.getScript({
+        url: "https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap",
+        timeout: 5000 //3 second timeout
+    })
+    .done(function(script, textStatus) {
+        console.log(textStatus);
+        whenAvailable("googleMap", function() {
+            var viewModel = new ViewModel();
+            ko.applyBindings(viewModel);
+            if (!googleMap.currentCenter.inRatio) {
+                $('#modal1').openModal();
+                viewModel.initApp = initApp;
+            } else initApp(viewModel);
+        });
+    })
+    .fail(function(jqxhr, settings, exception) {
+        view.displayError('We\'re currently experiencing connectivity issues with Google Map. Please try again later.');
+    });

@@ -5,6 +5,10 @@ var view = {
             self.favoriteCountElem = $('#favoriteCount');
             self.nearCountElem = $('#nearCount');
 
+            // if (viewModel.filteredFavoriteList().length < 3) {
+            //     $('#footerImage').addClass('fix-image');
+            // }
+
             var expanded = true;
             $('#collapsible-header').click(function() {
                 requestAnimationFrame(function() {
@@ -18,14 +22,21 @@ var view = {
 
             $('ul.tabs').tabs({
                 onShow: function(elem) {
+                    // $('#footerImage').removeClass('fix-image');
                     googleMap.closeInfoWindow();
                     var selectedTab = elem[0].id;
                     viewModel.searchString('');
                     $('input').blur();
                     if (selectedTab === 'favorites') {
                         viewModel.isTab1Selected(true);
-                        self.favoriteCountElem.removeClass('light-green lighten-1');
+                        self.favoriteCountElem.removeClass('yellow lighten-3');
+                        // if (viewModel.filteredFavoriteList().length < 3) {
+                        //     $('#footerImage').addClass('fix-image');
+                        // }
                     } else {
+                        // if (viewModel.filteredNearList().length < 3) {
+                        //     $('#footerImage').addClass('fix-image');
+                        // }
                         viewModel.isTab1Selected(false);
                         self.nearCountElem.removeClass('yellow lighten-3');
                     }
@@ -40,13 +51,13 @@ var view = {
         });
     },
     updateFavoriteCounter: function(placeName) {
-        this.favoriteCountElem.addClass('light-green lighten-1');
-        var $toastContent = $('<span class="teal-text text-lighten-1"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' added to favorites!</span>');
+        this.favoriteCountElem.addClass('yellow lighten-3');
+        var $toastContent = $('<span class=""><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' added to favorites</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
     },
     updateNearCounter: function(placeName) {
         this.nearCountElem.addClass('yellow lighten-3');
-        var $toastContent = $('<span class="teal-text text-lighten-1"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites!</span>');
+        var $toastContent = $('<span class=""><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
     },
     getNextPhoto: function(place, up) {
@@ -78,5 +89,14 @@ var view = {
             scrollTop: (140 * index) - 10
         }, 800);
         if (!$listElem.hasClass('active')) $listHeader.trigger('click');
+    },
+    clearInput: function() {
+        viewModel.searchString('');
+        $('input').blur();
+    },
+    displayError: function(errorMessage) {
+        $('#errorMessage').html('<i class="material-icons error_icon">error_outline</i> ' + errorMessage);
+        $('#preloader').fadeOut('slow');
     }
+
 }
