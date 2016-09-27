@@ -1026,14 +1026,7 @@ if ($) {
           newHeight = windowHeight * 0.9;
         }
 
-
-        var viewPortWidth = $(window).width();
-        var viewPortHeight = $(window).height();
-
-        var elemWidth = viewPortHeight < viewPortWidth ? viewPortHeight : viewPortWidth;
-        elemWidth = 0.85 * elemWidth;
-
-        elemWidth = elemWidth < 500 ? elemWidth : 500;
+        var elemWidth = $('.materialboxed').data('spam') ? $('.materialboxed').data('spam') : 500;
 		newWidth = elemWidth;
 		newHeight = elemWidth;
 

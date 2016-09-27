@@ -4,34 +4,18 @@ var view = {
         $(document).ready(function() {
             self.favoriteCountElem = $('#favoriteCount');
             self.nearCountElem = $('#nearCount');
-            self.sortList = $('.sort-dropdown');
 
             // if (viewModel.filteredFavoriteList().length < 3) {
             //     $('#footerImage').addClass('fix-image');
             // }
 
-            self.expanded = true;
+            var expanded = true;
             $('#collapsible-header').click(function() {
                 requestAnimationFrame(function() {
-                    var icon = 'expand_more';
-                    if (self.expanded) {
-                        icon = 'expand_less';
-                        self.sortList.fadeOut(150);
-                    } else {
-                        self.sortList.fadeIn(150);
-                    }
+                    var icon = expanded ? 'expand_less' : 'expand_more';
                     $('#accordion_icon').html(icon);
-                    self.expanded = !self.expanded;
+                    expanded = !expanded;
                 });
-            });
-
-            var viewPortWidth = $(window).width();
-            if (viewPortWidth < 501) $('#collapsible-header').trigger('click');
-
-            $(window).resize(function() {
-                var viewPortWidth = $(window).width();
-                if (viewPortWidth > 500 && !self.expanded) $('#collapsible-header').trigger('click');
-
             });
 
             $(".dropdown-button").dropdown();
@@ -68,12 +52,12 @@ var view = {
     },
     updateFavoriteCounter: function(placeName) {
         this.favoriteCountElem.addClass('yellow lighten-3');
-        var $toastContent = $('<span class="toast__text"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' added to favorites</span>');
+        var $toastContent = $('<span class=""><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' added to favorites</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
     },
     updateNearCounter: function(placeName) {
         this.nearCountElem.addClass('yellow lighten-3');
-        var $toastContent = $('<span class="toast__text"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites</span>');
+        var $toastContent = $('<span class=""><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
     },
     getNextPhoto: function(place, up) {
@@ -97,25 +81,14 @@ var view = {
         $imageElem.data('index', index);
     },
     showInList: function(placeID) {
-        var self = this;
-        if (!self.expanded) $('#collapsible-header').trigger('click');
         var $listHeader = $('#' + placeID + '_listHeader');
         var $listElem = $('#' + placeID + '_listElem');
-        var $divScroll = $("#ladilla2");
 
-        var elemHeight = $listHeader.height();
-        var divScrollTop = $divScroll.scrollTop();
-
+        var index = $listHeader.data('index');
+        $("#ladilla2").animate({
+            scrollTop: (140 * index) - 10
+        }, 800);
         if (!$listElem.hasClass('active')) $listHeader.trigger('click');
-
-        var index = $listHeader.attr('data-index');
-        var scrollTo = (elemHeight * index) - 5;
-
-        if (divScrollTop > (scrollTo + 20) || divScrollTop < (scrollTo - 20)) {
-            $divScroll.animate({
-                scrollTop: scrollTo
-            }, 800);
-        }
     },
     clearInput: function() {
         viewModel.searchString('');

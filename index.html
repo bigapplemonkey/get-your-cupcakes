@@ -51,36 +51,33 @@
                     </div>
                 </nav>
             </div>
+            <!-- Dropdown Structure -->
+            <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
+                <li>
+                    <a class="pink-text text-lighten-2" href="#" data-bind="html: $data.optionDisplay, click: function(){ $parent.sortPlacesBy($index());}"></a>
+                </li>
+            </ul>
+            <nav class="blue lighten-2 z-depth-0">
+                <div class="nav-wrapper">
+                    <ul class="left flex-container">
+                        <li class="navigation__tabs">
+                            <ul class="tabs blue lighten-2">
+                                <li class="tab"><a class="active" href="#favorites">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteList().length"></div></a></li>
+                                <li class="tab"><a href="#near">Near By<div  id="nearCount" class="chip" data-bind="text: nearList().length"></div></a></li>
+                            </ul>
+                        </li>
+                        <li class="sort-dropdown"><a class="dropdown-button" href="#!" data-activates="dropdown1">SORT BY<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
         <div class="col s12 accordion">
             <ul class="collapsible navigation__content z-depth-0" data-collapsible="accordion">
                 <li class="z-depth-0">
-                    <div id="collapsible-header" class="collapsible-header active navigation__content__header hide-on-large-only">
-                        <div><i id="accordion_icon" class="material-icons">expand_more</i></div>
+                    <div id="collapsible-header" class="collapsible-header active navigation__content__header">
+                        <i id="accordion_icon" class="material-icons white-text">expand_more</i>
                     </div>
                     <div id="ladilla2" class="collapsible-body navigation__content__body grey lighten-4">
-                        <!-- Dropdown Structure -->
-                        <ul id="dropdown1" class="dropdown-content" data-bind="foreach: sortOptions">
-                            <li>
-                                <a class="pink-text text-lighten-2" href="#" data-bind="html: $data.optionDisplay, click: function(){ $parent.sortPlacesBy($index());}"></a>
-                            </li>
-                        </ul>
-                        <div class="navbar-fixed">
-                            <nav class="blue lighten-2 z-depth-0">
-                                <div class="nav-wrapper">
-                                    <ul class="right">
-                                        <li class="navigation__tabs">
-                                            <ul class="tabs blue lighten-2">
-                                                <li class="tab"><a class="active" href="#favorites">Favorites<div id="favoriteCount" class="chip" data-bind="text: favoriteList().length"></div></a></li>
-                                                <li class="tab"><a href="#near">Near By<div  id="nearCount" class="chip" data-bind="text: nearList().length"></div></a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">SORT BY<i class="material-icons right">arrow_drop_down</i></a></li>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </div>
-                        <div class="gray backdrop" data-bind="visible: !isDataReady()"></div>
                         <div id="favorites" class="col s12 grey lighten-5">
                             <ul id="ladilla" class="collapsible" data-collapsible="accordion" data-bind="template: {if: isDataReady, name: 'place-list', foreach: filteredFavoriteList}">
                             </ul>
@@ -144,11 +141,23 @@
             <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat blue-text" data-bind="click: updateCenter">OK</a>
         </div>
     </div>
+    <!-- Modal Trigger -->
+    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal bottom-sheet">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
     <!-- List Template -->
     <script type="text/html" id="place-list">
         <li data-bind="attr: {id: placeID + '_listElem'}">
             <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements, attr: {id: placeID + '_listHeader', 'data-index': $index}">
-                <img class="card__image " src=" " alt="Cupcake store " data-bind="attr: {src: photos[0]} ">
+                <img class="card__image responsive-img" src=" " alt="Cupcake store " data-bind="attr: {src: photos[0]} ">
                 <div class="card__details flex-container ">
                     <!-- <div class="teal-text text-lighten-1 card__number " data-bind="text: '#' + ($index() + 1) "></div> -->
                     <h5 class="font-grey card__title ">
@@ -217,7 +226,7 @@
                         </div>
                     </div>
                     <div class="card__gallery">
-                        <img class="materialboxed card__gallery" data-spam="500" src=" " alt="Cupcake store " data-bind="attr: {src: photos[1], 'data-index': 1, id: placeID} ">
+                        <img class="materialboxed card__gallery responsive-img" data-spam="500" src=" " alt="Cupcake store " data-bind="attr: {src: photos[1], 'data-index': 1, id: placeID} ">
                         <div class="center-align card__gallery__controls">
                             <i class="material-icons pink-text text-lighten-2" data-bind="click: view.getNextPhoto($data, false)">navigate_before</i>
                             <i class="material-icons pink-text text-lighten-2" data-bind="click: view.getNextPhoto($data, true)">navigate_next</i>
