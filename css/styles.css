@@ -1,37 +1,11 @@
-@import url(http://weloveiconfonts.com/api/?family=zocial);
-
-/* zocial */
-
-[class*="zocial-"]:before {
-    font-family: 'zocial', sans-serif;
-}
-
-
 /************ All DOM styles ************/
 
 * {
-    /*outline: 1px solid red !important;*/
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
-
-
-/*::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}*/
-
-
-/* Display scroll all time*/
-
-
-/*::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}*/
 
 html,
 body,
@@ -79,12 +53,13 @@ main {
     display: block;
 }
 
-.social-icon {
+a .fa {
+    font-size: 20px;
     margin-right: 12px;
     color: #7E7E7E;
 }
 
-.social-icon:hover {
+.fa:hover {
     opacity: 0.8;
 }
 
@@ -163,13 +138,6 @@ a .chip {
     font-size: 13px;
 }
 
-
-/*li.active {
-    margin-bottom: 15px;
-    margin-top: 15px;
-    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-}*/
-
 #near,
 #favorites {
     padding: 0;
@@ -203,12 +171,6 @@ nav .input-field label.active i {
     width: 110px;
 }
 
-
-/*nav .nav-wrapper i {
-    height: 64px;
-    line-height: 45px;
-}*/
-
 nav ul a {
     font-size: 0.8rem;
 }
@@ -230,13 +192,12 @@ nav ul a {
     z-index: 1;
     padding: 0;
     overflow: hidden;
-    /*background-color: #72c1ed;*/
-    /*background-image: url("../images/cupcakes35.jpg");*/
 }
 
 .navigation nav.blue {
     margin-top: 8px;
     height: 55px;
+    width: 406px;
 }
 
 .navigation__content {
@@ -266,7 +227,7 @@ nav ul a {
 }
 
 .navigation__content__body {
-    height: 94vh;
+    height: 89vh;
     overflow: auto;
     position: relative;
 }
@@ -278,8 +239,10 @@ nav ul a {
 
 .navigation__footer__image1 {
     margin: 20px auto;
-    padding-top: 50px;
+    padding-top: 80px;
     max-width: 62px;
+    position: relative;
+    bottom: 60px;
 }
 
 .fix-image {
@@ -289,7 +252,6 @@ nav ul a {
 }
 
 .attribution {
-    /*margin: 10px auto;*/
     position: absolute;
     bottom: 24px;
     right: 45px;
@@ -321,12 +283,9 @@ nav ul a {
 
 .row .col.logo {
     width: 430px;
-    /*    background-image: url("../images/cupcakes40.jpg");
-*/
 }
 
 .col.logo {
-    /*padding: 17px 10px 0 10px;*/
     padding: 0;
     margin: 15px 24px 0px 24px !important;
 }
@@ -344,13 +303,9 @@ nav ul a {
 .logo__image {
     width: 50px;
     height: 50px;
-    /*    display: block;
-*/
 }
 
 .search {
-    /* margin: 20px auto;
-    max-width: 350px;*/
     height: 50px;
 }
 
@@ -443,7 +398,6 @@ nav .nav-wrapper form .input-field {
 
 .card__price {
     width: 100%;
-    /*padding-left: 2%;*/
     font-size: 12px;
 }
 
@@ -464,13 +418,11 @@ nav .nav-wrapper form .input-field {
 
 .card__comment__icon {
     width: 13%;
-    /*color: #bbdefb;*/
     color: #b1b1b1;
 }
 
 .card__comments__icon {
     width: 13%;
-    /*color: #bbdefb;*/
     color: #b1b1b1;
 }
 
@@ -482,7 +434,6 @@ nav .nav-wrapper form .input-field {
 .card__comment__icon i,
 .card__comments__icon i {
     line-height: 15px;
-    /*margin-top: 3px;*/
 }
 
 .card__contacts__icon i {
@@ -534,19 +485,12 @@ span.badge.card__price__text {
 .card__content {
     padding: 15px 24px;
     font-size: 13px;
-    /*    background-color: #fdeff4;
-*/
-}
-
-.card__content__attribute {
-    /*width: 7%;*/
 }
 
 .toast__image {
     position: relative;
     top: 7px;
     max-width: 30px;
-    /*margin-top: 5px;*/
     margin-right: 5px;
 }
 
@@ -581,10 +525,6 @@ span.badge.card__price__text {
 
 .card__content .material-icons {
     font-size: 20px;
-}
-
-.backdrop {
-    /*background-color: purple;*/
 }
 
 .backdrop {
@@ -653,18 +593,12 @@ nav i.arrow {
 
 .info__image {
     margin-right: 7px;
-    /*display: block;*/
-    /*width: 100%;*/
-    /*margin: 0 auto;*/
 }
 
 .info__title {
     font-size: 13px;
     text-align: center;
 }
-
-
-/*and (min-width: 601px)*/
 
 @media all and (max-width: 992px) {
     .navigation {
@@ -676,8 +610,11 @@ nav i.arrow {
     .navigation__tabs {
         width: 268px;
     }
+    .navigation nav.blue {
+        width: 351px;
+    }
     .dropdown-button .material-icons {
-        margin-left: 4px;
+        margin-left: 2px;
     }
     .card__image {
         max-width: 95px;
@@ -710,7 +647,7 @@ nav i.arrow {
     }
     nav ul a {
         padding-left: 5px;
-        padding-right: 5px;
+        padding-right: 4px;
     }
     nav .input-field label i {
         line-height: 40px;
@@ -782,6 +719,9 @@ nav i.arrow {
     .navbar-fixed nav {
         width: 100%;
     }
+    .navigation nav.blue {
+        width: 100%;
+    }
     .row .col.logo {
         margin: 8px auto 0 auto !important;
         padding-left: 8px;
@@ -806,6 +746,12 @@ nav i.arrow {
         width: 100%;
         margin-left: 0;
         /*margin-top: 128px;*/
+    }
+    .toast__text {
+        font-size: 10px;
+    }
+    a .fa {
+        font-size: 18px;
     }
 }
 
@@ -856,9 +802,6 @@ nav i.arrow {
         max-width: 316px;
         left: calc(50% - 158px);
     }
-    .toast__text {
-        font-size: 11px;
-    }
     .card__gallery {
         width: 110px;
         height: 110px;
@@ -872,5 +815,8 @@ nav i.arrow {
     .card__content .material-icons,
     .card__comment__icon i {
         font-size: 18px;
+    }
+    .card-panel {
+        font-size: 12px;
     }
 }

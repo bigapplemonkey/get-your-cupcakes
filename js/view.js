@@ -5,12 +5,8 @@ var view = {
             self.favoriteCountElem = $('#favoriteCount');
             self.nearCountElem = $('#nearCount');
             self.sortList = $('.sort-dropdown');
-
-            // if (viewModel.filteredFavoriteList().length < 3) {
-            //     $('#footerImage').addClass('fix-image');
-            // }
-
             self.expanded = true;
+
             $('#collapsible-header').click(function() {
                 requestAnimationFrame(function() {
                     var icon = 'expand_more';
@@ -38,23 +34,17 @@ var view = {
 
             $('ul.tabs').tabs({
                 onShow: function(elem) {
-                    // $('#footerImage').removeClass('fix-image');
                     googleMap.closeInfoWindow();
                     var selectedTab = elem[0].id;
                     viewModel.searchString('');
                     $('input').blur();
                     if (selectedTab === 'favorites') {
                         viewModel.isTab1Selected(true);
-                        self.favoriteCountElem.removeClass('yellow lighten-3');
-                        // if (viewModel.filteredFavoriteList().length < 3) {
-                        //     $('#footerImage').addClass('fix-image');
-                        // }
+                        requestAnimationFrame(function() { self.favoriteCountElem.removeClass('yellow lighten-3') });
+
                     } else {
-                        // if (viewModel.filteredNearList().length < 3) {
-                        //     $('#footerImage').addClass('fix-image');
-                        // }
                         viewModel.isTab1Selected(false);
-                        self.nearCountElem.removeClass('yellow lighten-3');
+                        requestAnimationFrame(function() { self.nearCountElem.removeClass('yellow lighten-3') });
                     }
 
                 }
@@ -88,9 +78,11 @@ var view = {
             if (index < 0) index = place.photos.length - 1;
         }
 
-        $imageElem.fadeOut(150, function() {
-            $(this).attr('src', place.photos[index]).bind('onreadystatechange load', function() {
-                if (this.complete) $(this).fadeIn(150);
+        requestAnimationFrame(function() {
+            $imageElem.fadeOut(150, function() {
+                $(this).attr('src', place.photos[index]).bind('onreadystatechange load', function() {
+                    if (this.complete) $(this).fadeIn(150);
+                });
             });
         });
 
@@ -101,7 +93,7 @@ var view = {
         if (!self.expanded) $('#collapsible-header').trigger('click');
         var $listHeader = $('#' + placeID + '_listHeader');
         var $listElem = $('#' + placeID + '_listElem');
-        var $divScroll = $("#ladilla2");
+        var $divScroll = $('#navigationContentBody');
 
         var elemHeight = $listHeader.height();
         var divScrollTop = $divScroll.scrollTop();
@@ -112,18 +104,22 @@ var view = {
         var scrollTo = (elemHeight * index) - 5;
 
         if (divScrollTop > (scrollTo + 20) || divScrollTop < (scrollTo - 20)) {
-            $divScroll.animate({
-                scrollTop: scrollTo
-            }, 800);
+            requestAnimationFrame(function() {
+                $divScroll.animate({
+                    scrollTop: scrollTo
+                }, 800);
+            });
         }
     },
     clearInput: function() {
         viewModel.searchString('');
-        $('input').blur();
+        requestAnimationFrame(function() { $('input').blur(); });
     },
     displayError: function(errorMessage) {
-        $('#errorMessage').html('<i class="material-icons error_icon">error_outline</i> ' + errorMessage);
-        $('#preloader').fadeOut('slow');
+        requestAnimationFrame(function() {
+            $('#errorMessage').html('<i class="material-icons error_icon">error_outline</i> ' + errorMessage);
+            $('#preloader').fadeOut('slow');
+        });
     }
 
 }

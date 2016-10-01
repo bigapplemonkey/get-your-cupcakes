@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
     <!--Import custom css-->
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://use.fontawesome.com/e01545ec6d.js"></script>
 </head>
 
 <body>
@@ -77,9 +78,9 @@
                     <div id="collapsible-header" class="collapsible-header active navigation__content__header">
                         <i id="accordion_icon" class="material-icons white-text">expand_more</i>
                     </div>
-                    <div id="ladilla2" class="collapsible-body navigation__content__body grey lighten-4">
+                    <div id="navigationContentBody" class="collapsible-body navigation__content__body grey lighten-4">
                         <div id="favorites" class="col s12 grey lighten-5">
-                            <ul id="ladilla" class="collapsible" data-collapsible="accordion" data-bind="template: {if: isDataReady, name: 'place-list', foreach: filteredFavoriteList}">
+                            <ul class="collapsible" data-collapsible="accordion" data-bind="template: {if: isDataReady, name: 'place-list', foreach: filteredFavoriteList}">
                             </ul>
                         </div>
                         <div id="near" class="col s12 grey lighten-5">
@@ -114,7 +115,6 @@
                         </div>
                         <!-- /ko -->
                         <img src="images/smily-cupcake_7.png" alt="" class="navigation__footer__image1 make-block">
-                        <!-- <img src="images/Powered-by-Foursquare.png" alt="" class="navigation__footer__image2 make-block"> -->
                     </div>
                 </li>
             </ul>
@@ -159,14 +159,12 @@
             <div class="collapsible-header flex-container " data-bind="click: $parent.initViewElements, attr: {id: placeID + '_listHeader', 'data-index': $index}">
                 <img class="card__image responsive-img" src=" " alt="Cupcake store " data-bind="attr: {src: photos[0]} ">
                 <div class="card__details flex-container ">
-                    <!-- <div class="teal-text text-lighten-1 card__number " data-bind="text: '#' + ($index() + 1) "></div> -->
                     <h5 class="font-grey card__title ">
                       <span class="pink-text text-lighten-2" data-bind="text: '#' + ($index() + 1) + ' '"></span>
                       <span data-bind="text: title"></span>
                     </h5>
                     <a class="btn-floating pink lighten-2" data-bind="visible: $parent.isTab1Selected, click: $parent.removeFromFavorites"><i class="material-icons">remove</i></a>
                     <a class="btn-floating pink lighten-2" data-bind="visible: !$parent.isTab1Selected(), click: $parent.addToFavorites "><i class="material-icons">add</i></a>
-                    <!--  <div class="card__number"></div> -->
                     <div class="card__ratings ">
                         <span data-bind="text: rating.toFixed(1) "></span><span class="font-grey "> Rating | </span>
                         <span data-bind="text: likes "></span><span class="font-grey "> Likes </span>
@@ -176,11 +174,6 @@
                         $ <span data-bind="text: priceLevel"></span>
                         <!-- /ko -->
                     </div>
-                    <!-- <div class="card__price "> -->
-                    <!-- ko if: priceLevel -->
-                    <!-- <span class="card__price__text badge z-depth-1 " data-bind="html: priceLevel + '<i class=&quot;card__price__icon material-icons&quot;>attach_money</i>' "></span> -->
-                    <!-- /ko -->
-                    <!-- </div> -->
                     <div class="card__comment flex-container ">
                         <!-- ko if: review -->
                         <div class="card__comment__icon "><i class="material-icons ">account_circle</i></div>
@@ -212,8 +205,8 @@
                         </div>
                         <!-- /ko -->
                         <div class="card__contacts__social">
-                            <a href="" target="_blank" data-bind="visible: facebook, attr: { href: 'http://facebook.com/' + facebook} "><span class="social-icon zocial-facebook"></span></a>
-                            <a href="" target="_blank" data-bind="visible: twitter, attr: { href: 'http://twitter.com/' + twitter}"><span class="social-icon zocial-twitter"></span></a>
+                            <a href="" target="_blank" data-bind="visible: facebook, attr: { href: 'http://facebook.com/' + facebook} "><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                            <a href="" target="_blank" data-bind="visible: twitter, attr: { href: 'http://twitter.com/' + twitter}"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
