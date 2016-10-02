@@ -136,9 +136,13 @@ var view = {
             $('#preloader').fadeOut('slow');
         });
     },
+
+    // Stops loader
     removeLoader: function() {
         $('#loader-wrapper').fadeOut('slow');
     },
+
+    // Opens modal
     openModal: function() {
         $('#modal1').openModal();
     }

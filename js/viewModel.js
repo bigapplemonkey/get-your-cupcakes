@@ -352,7 +352,7 @@ function whenAvailable(name, callback) {
 }
 
 
-// Initialized the application
+// Initializes the application
 function initApp(viewModel) {
     viewModel.initPlaces();
     viewModel.initComputed();
