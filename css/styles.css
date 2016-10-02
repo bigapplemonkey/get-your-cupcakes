@@ -258,7 +258,7 @@ nav ul a {
     height: 50px;
 }
 
-.test {
+.search-wrapper {
     width: 212px;
     margin-left: 16px;
 }
@@ -483,7 +483,7 @@ nav i.arrow {
 a .fa {
     font-size: 20px;
     margin-right: 12px;
-    color: #7E7E7E;
+    color: #7e7e7e;
 }
 
 .fa:hover {
@@ -512,36 +512,46 @@ a .fa {
     .navigation {
         width: 360px;
     }
+
     .navbar-fixed nav {
         width: 360px;
     }
+
     .navigation__tabs {
         width: 268px;
     }
+
     .navigation nav.blue {
         width: 351px;
     }
+
     .dropdown-button .material-icons {
         margin-left: 2px;
     }
+
     .card__image {
         max-width: 95px;
         max-height: 95px;
     }
+
     .card__details {
         width: 205px;
     }
+
     .card__title {
         width: 91%;
         font-size: 12px;
         margin-bottom: 2px;
     }
+
     .card__price {
         margin-top: 1px;
     }
+
     .card__comment {
         margin-top: 10px;
     }
+
     .card__ratings,
     .card__price,
     .card__comment__text,
@@ -549,42 +559,53 @@ a .fa {
     .card__content {
         font-size: 11px;
     }
+
     .card__gallery {
         width: 122px;
         height: 122px;
     }
+
     nav ul a {
         padding-left: 5px;
         padding-right: 4px;
     }
+
     nav .input-field label i {
         line-height: 40px;
     }
+
     nav .input-field i {
         line-height: 40px;
     }
+
     .logo__image {
         width: 35px;
         height: 35px;
         margin-top: 3px;
     }
+
     .logo__title {
         font-size: 1.4rem;
         width: 100px;
     }
+
     .col.logo {
         margin: 10px 10px 0 10px !important;
     }
+
     .search {
         height: 40px;
     }
+
     .input-field input[type="search"] {
         width: 85px;
     }
-    .test {
+
+    .search-wrapper {
         width: 188px;
         margin-top: 2px;
     }
+
     #map {
         width: calc(100% - 360px);
         margin-left: 360px;
@@ -598,22 +619,28 @@ a .fa {
         max-width: 23px;
         max-height: 23px;
     }
+
     .info__title {
         font-size: 10px;
     }
+
     .navigation nav.blue {
         margin-top: 2px;
     }
+
     .dropdown-button,
     .dropdown-button .material-icons {
         line-height: 64px;
     }
+
     #toast-container {
         padding: 10px;
     }
+
     .attribution__image {
         max-width: 170px;
     }
+
     .error_container {
         top: calc(10%);
         font-size: 17px;
@@ -624,39 +651,50 @@ a .fa {
     .navigation {
         width: 100%;
     }
+
     .navbar-fixed nav {
         width: 100%;
     }
+
     .navigation nav.blue {
         width: 100%;
     }
+
     .row .col.logo {
         margin: 8px auto 0 auto !important;
         padding-left: 8px;
         float: none;
     }
+
     .card__details {
         width: calc(100% - 105px);
     }
+
     .card__comments {
         width: calc(100% - 130px);
     }
+
     .navigation__content__header {
         display: block;
     }
+
     .navigation__tabs {
         margin-left: 30px;
     }
+
     .navigation__tabs {
         width: 255px;
     }
+
     #map {
         width: 100%;
         margin-left: 0;
     }
+
     .toast__text {
         font-size: 10px;
     }
+
     a .fa {
         font-size: 18px;
     }
@@ -666,63 +704,81 @@ a .fa {
     .navigation__tabs {
         width: 213px;
     }
+
     nav ul a {
         font-size: 0.7rem;
     }
+
     .dropdown-button .material-icons {
         margin-left: 0;
     }
+
     .card__details {
         width: calc(100% - 95px);
     }
+
     .card__comment {
         margin-top: 5px;
     }
+
     .card__image {
         width: 85px;
     }
+
     .card__comment__icon {
         width: 15%;
     }
+
     .card__comment__text {
         width: 85%;
     }
+
     .card__comment__text,
     .card__comments__text,
     .chip {
         font-size: 10px;
     }
-    .test {
+
+    .search-wrapper {
         width: 151px;
     }
+
     .input-field input[type=search]+label {
         left: 5px;
     }
+
     .input-field input[type=search] ~ .material-icons {
         right: 5px;
     }
+
     .input-field input[type="search"] {
         width: 80px;
         padding-left: 37px;
     }
+
     .error_container {
         max-width: 316px;
         left: calc(50% - 158px);
     }
+
     .card__gallery {
         width: 110px;
         height: 110px;
     }
+
     .card__comments {
         width: calc(100% - 118px);
     }
+
     .card__contacts__text {
         margin-left: 6px;
     }
+
     .card__content .material-icons,
     .card__comment__icon i {
         font-size: 18px;
     }
+
     .card-panel {
         font-size: 12px;
     }
