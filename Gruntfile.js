@@ -22,7 +22,8 @@ module.exports = function(grunt) {
                     'js/map.min.js': ['js/map.js'],
                     'js/model.min.js': ['js/model.js'],
                     'js/viewModel.min.js': ['js/viewModel.js'],
-                    'js/view.min.js': ['js/view.js']
+                    'js/view.min.js': ['js/view.js'],
+                    'js/materialize.min.js': ['js/materialize.js']
                 }
             }
         }
