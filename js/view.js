@@ -41,11 +41,11 @@ var view = {
                     $('input').blur();
                     if (selectedTab === 'favorites') {
                         viewModel.isTab1Selected(true);
-                        requestAnimationFrame(function() { self.favoriteCountElem.removeClass('yellow lighten-3') });
+                        requestAnimationFrame(function() { self.favoriteCountElem.removeClass('yellow lighten-3'); });
 
                     } else {
                         viewModel.isTab1Selected(false);
-                        requestAnimationFrame(function() { self.nearCountElem.removeClass('yellow lighten-3') });
+                        requestAnimationFrame(function() { self.nearCountElem.removeClass('yellow lighten-3'); });
                     }
 
                 }
@@ -147,4 +147,4 @@ var view = {
         $('#modal1').openModal();
     }
 
-}
+};

@@ -10,7 +10,7 @@ var ViewModel = function() {
                 self.initMarker(place);
             }
         );
-    }
+    };
 
     // Returnd IDs of places saved in the model
     self.getInitialPlacesIDs = function() {
@@ -182,7 +182,7 @@ var ViewModel = function() {
         model.position = {
             center: googleMap.currentCenter.center,
             name: googleMap.currentCenter.name
-        }
+        };
         model.initialPlaces = [];
         localStorage.favoritePlaces = JSON.stringify(model);
         googleMap.centerMap(googleMap.currentCenter.center);
@@ -333,8 +333,8 @@ function sort(array, sortBy) {
     if (['likes', 'rating'].indexOf(sortBy) > -1) trueValue = trueValue * -1;
     if (array && sortBy) {
         array.sort(function(l, r) {
-            return l[sortBy] > r[sortBy] ? trueValue : -trueValue
-        })
+            return l[sortBy] > r[sortBy] ? trueValue : -trueValue;
+        });
     }
 }
 

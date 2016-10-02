@@ -1,7 +1,6 @@
-// Whole-script strict mode syntax
-'use strict';
-
 (function() {
+    // Whole-script strict mode syntax
+    'use strict';
     var map,
         largeInfowindow,
         defaultIcon,
@@ -133,7 +132,7 @@
             displayMarkers: displayMarkers,
             closeInfoWindow: closeInfoWindow,
             centerMap: centerMap
-        }
+        };
 
         getCurrentCenter(center, function(result, status) {
             if (status === 'OK') googleMap.currentCenter = result;
@@ -220,7 +219,7 @@
 
     // Centers map
     function centerMap(center) {
-        map.setCenter(center ? center : map.center)
+        map.setCenter(center ? center : map.center);
         map.setZoom(10);
     }
 
@@ -242,12 +241,12 @@
             map.fitBounds(bounds);
         } else centerMap();
 
-    };
+    }
 
     // Retrieves the string name of the user's current location
     // Source: https://gist.github.com/AmirHossein/92a0597b5f723b19c648
     function getLocationFormattedString(point, callback) {
-        var geocoder = new google.maps.Geocoder;
+        var geocoder = new google.maps.Geocoder();
         geocoder.geocode({ 'location': point }, function(results, status) {
             if (status === 'OK') {
                 if (results[1]) {
@@ -308,7 +307,7 @@
                 currentPosition = {
                     center: pos,
                     inRatio: true
-                }
+                };
 
                 var newCenter = new google.maps.LatLng(pos.lat, pos.lng);
                 var previousCenter = new google.maps.LatLng(modelCenter.lat, modelCenter.lng);

@@ -141,16 +141,6 @@
     </div>
     <!-- Modal Trigger -->
     <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal bottom-sheet">
-        <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
-    </div>
     <!-- List Template -->
     <script type="text/html" id="place-list">
         <li data-bind="attr: {id: placeID + '_listElem'}">
@@ -217,7 +207,7 @@
                         </div>
                     </div>
                     <div class="card__gallery">
-                        <img class="materialboxed card__gallery responsive-img" data-spam="500" src=" " alt="Cupcake store " data-bind="attr: {src: photos[1], 'data-index': 1, id: placeID} ">
+                        <img class="materialboxed card__gallery responsive-img" src=" " alt="Cupcake store " data-bind="attr: {src: photos[1], 'data-index': 1, id: placeID} ">
                         <div class="center-align card__gallery__controls">
                             <i class="material-icons pink-text text-lighten-2" data-bind="click: view.getNextPhoto($data, false)">navigate_before</i>
                             <i class="material-icons pink-text text-lighten-2" data-bind="click: view.getNextPhoto($data, true)">navigate_next</i>
