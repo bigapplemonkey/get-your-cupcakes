@@ -1,4 +1,5 @@
 var view = {
+    // Initializes the view
     init: function() {
         var self = this;
         $(document).ready(function() {
@@ -51,21 +52,29 @@ var view = {
             });
         });
     },
+
+    // Initializes the card elements
     initCardElems: function() {
         $(document).ready(function() {
             $('.materialboxed').materialbox();
         });
     },
+
+    // Updates the favorites' counter
     updateFavoriteCounter: function(placeName) {
         this.favoriteCountElem.addClass('yellow lighten-3');
         var $toastContent = $('<span class="toast__text"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' added to favorites</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
     },
+
+    // Updates the near' counter
     updateNearCounter: function(placeName) {
         this.nearCountElem.addClass('yellow lighten-3');
         var $toastContent = $('<span class="toast__text"><img src="images/smily-cupcake35.png" alt="" class="toast__image">' + placeName + ' removed from favorites</span>');
         Materialize.toast($toastContent, 1400, 'rounded');
     },
+
+    // Retrieves next photo in array
     getNextPhoto: function(place, up) {
         var $imageElem = $('#' + place.placeID);
         var index = $imageElem.data('index');
@@ -88,6 +97,8 @@ var view = {
 
         $imageElem.data('index', index);
     },
+
+    // Displays element in the list
     showInList: function(placeID) {
         var self = this;
         if (!self.expanded) $('#collapsible-header').trigger('click');
@@ -111,15 +122,25 @@ var view = {
             });
         }
     },
+
+    // Clears the search textbox
     clearInput: function() {
         viewModel.searchString('');
         requestAnimationFrame(function() { $('input').blur(); });
     },
+
+    // Displays an error
     displayError: function(errorMessage) {
         requestAnimationFrame(function() {
             $('#errorMessage').html('<i class="material-icons error_icon">error_outline</i> ' + errorMessage);
             $('#preloader').fadeOut('slow');
         });
+    },
+    removeLoader: function() {
+        $('#loader-wrapper').fadeOut('slow');
+    },
+    openModal: function() {
+        $('#modal1').openModal();
     }
 
 }

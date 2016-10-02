@@ -22,10 +22,6 @@ main {
 
 /************ Helper styles ************/
 
-.center_elem {
-    margin: 0 auto;
-}
-
 .flex-container {
     display: -webkit-flex;
     display: flex;
@@ -45,40 +41,16 @@ main {
     text-decoration: underline;
 }
 
-.font-pink {
-    color: rgb(127, 127, 127);
-}
-
 .make-block {
     display: block;
-}
-
-a .fa {
-    font-size: 20px;
-    margin-right: 12px;
-    color: #7E7E7E;
-}
-
-.fa:hover {
-    opacity: 0.8;
 }
 
 
 /************ Materialize modifiers ************/
 
-.card {
-    margin: 10px 20px;
-    /*height: 300px;*/
-}
-
 .navbar-fixed,
 nav ul a {
     height: 55px;
-}
-
-.navbar-fixed nav {
-    width: 430px;
-    height: 55px
 }
 
 .tabs {
@@ -126,12 +98,6 @@ a .chip {
 
 .divider {
     margin: 20px auto 13px auto;
-}
-
-.navbar-fixed nav .nav-wrapper {
-    -webkit-box-shadow: 0px 5px 5px -4px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 5px 5px -4px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 5px 5px -4px rgba(0, 0, 0, 0.75);
 }
 
 .dropdown-content li>a {
@@ -184,7 +150,7 @@ nav ul a {
 }
 
 
-/************ Header ************/
+/************ Side Bar ************/
 
 .navigation {
     position: fixed;
@@ -245,12 +211,6 @@ nav ul a {
     bottom: 60px;
 }
 
-.fix-image {
-    position: absolute;
-    bottom: 0;
-    right: calc(50% - 31px);
-}
-
 .attribution {
     position: absolute;
     bottom: 24px;
@@ -266,17 +226,6 @@ nav ul a {
     line-height: 21.75px;
 }
 
-.speech-bubble {
-    display: block;
-    border-radius: 50%;
-    text-align: center;
-    padding: 20px;
-    margin: 50px auto;
-    width: 240px;
-    height: 100px;
-    background-color: white;
-}
-
 .navigation__tabs {
     width: 262px;
 }
@@ -287,7 +236,7 @@ nav ul a {
 
 .col.logo {
     padding: 0;
-    margin: 15px 24px 0px 24px !important;
+    margin: 15px 24px 0 24px !important;
 }
 
 .logo__title {
@@ -362,11 +311,6 @@ nav .nav-wrapper form .input-field {
     line-height: 12px;
 }
 
-.card__number {
-    width: 12%;
-    margin-top: 0;
-}
-
 .card__title {
     width: 95%;
     font-size: 14px;
@@ -375,20 +319,6 @@ nav .nav-wrapper form .input-field {
     margin-top: 0;
     margin-bottom: 0;
     line-height: 14px;
-}
-
-.secondary-content {
-    width: 5%;
-    line-height: 20px;
-    float: none;
-}
-
-.secondary-content i {
-    line-height: 20px;
-}
-
-.card__button {
-    width: 15%;
 }
 
 .card__ratings {
@@ -460,28 +390,6 @@ nav .nav-wrapper form .input-field {
     padding-right: 3px;
 }
 
-span .card__price__icon {
-    font-size: 16px;
-    line-height: 18px;
-    width: 15px;
-    margin-right: 0;
-    margin-left: 2px;
-}
-
-span.badge.card__price__text {
-    font-weight: 300;
-    font-size: 0.8rem;
-    color: #fff;
-    background-color: #26a69a;
-    border-radius: 2px;
-    padding-left: 0;
-    padding-top: 1px;
-    left: 0;
-    top: 40px;
-    max-width: 74px;
-    line-height: 18px;
-}
-
 .card__content {
     padding: 15px 24px;
     font-size: 13px;
@@ -519,18 +427,8 @@ span.badge.card__price__text {
     text-align: left;
 }
 
-.card__content__website {
-    width: 100%;
-}
-
 .card__content .material-icons {
     font-size: 20px;
-}
-
-.backdrop {
-    width: 100%;
-    height: 100%;
-    z-index: 1005;
 }
 
 #loader-wrapper {
@@ -562,7 +460,7 @@ span.badge.card__price__text {
     max-width: 360px;
     text-align: center;
     position: relative;
-    top: calc(28%);
+    top: calc(24%);
     left: calc(50% - 180px);
     font-size: 20px;
     color: #575757;
@@ -580,6 +478,16 @@ span.badge.card__price__text {
 
 nav i.arrow {
     font-size: 13px;
+}
+
+a .fa {
+    font-size: 20px;
+    margin-right: 12px;
+    color: #7E7E7E;
+}
+
+.fa:hover {
+    opacity: 0.8;
 }
 
 
@@ -665,7 +573,7 @@ nav i.arrow {
         width: 100px;
     }
     .col.logo {
-        margin: 10px 10px 0px 10px !important;
+        margin: 10px 10px 0 10px !important;
     }
     .search {
         height: 40px;
@@ -745,7 +653,6 @@ nav i.arrow {
     #map {
         width: 100%;
         margin-left: 0;
-        /*margin-top: 128px;*/
     }
     .toast__text {
         font-size: 10px;

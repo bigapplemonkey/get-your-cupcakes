@@ -1,111 +1,114 @@
 // Whole-script strict mode syntax
-"use strict";
+'use strict';
 
 (function() {
     var map,
         largeInfowindow,
-        defaultIcon, highlightedIcon;
+        defaultIcon,
+        highlightedIcon;
 
+
+    // Map Initialization
     function initMap() {
         var styles = [{
-            "featureType": "landscape.man_made",
-            "elementType": "geometry",
-            "stylers": [{
-                "color": "#fdf9eb"
+            'featureType': 'landscape.man_made',
+            'elementType': 'geometry',
+            'stylers': [{
+                'color': '#fdf9eb'
             }]
         }, {
-            "featureType": "landscape.natural",
-            "elementType": "geometry",
-            "stylers": [{
-                "color": "#def2d5"
+            'featureType': 'landscape.natural',
+            'elementType': 'geometry',
+            'stylers': [{
+                'color': '#def2d5'
             }]
         }, {
-            "featureType": "landscape.natural.terrain",
-            "elementType": "geometry",
-            "stylers": [{
-                "color": "#def2d5",
-                "visibility": "off"
+            'featureType': 'landscape.natural.terrain',
+            'elementType': 'geometry',
+            'stylers': [{
+                'color': '#def2d5',
+                'visibility': 'off'
             }]
         }, {
-            "featureType": "poi",
-            "elementType": "labels",
-            "stylers": [{
-                "visibility": "off"
+            'featureType': 'poi',
+            'elementType': 'labels',
+            'stylers': [{
+                'visibility': 'off'
             }]
         }, {
-            "featureType": "poi.business",
-            "elementType": "all",
-            "stylers": [{
-                "visibility": "off"
+            'featureType': 'poi.business',
+            'elementType': 'all',
+            'stylers': [{
+                'visibility': 'off'
             }]
         }, {
-            "featureType": "poi.medical",
-            "elementType": "geometry",
-            "stylers": [{
-                "color": "#fbd3da"
+            'featureType': 'poi.medical',
+            'elementType': 'geometry',
+            'stylers': [{
+                'color': '#fbd3da'
             }]
         }, {
-            "featureType": "poi.park",
-            "elementType": "geometry",
-            "stylers": [{
-                "color": "#def2d5"
+            'featureType': 'poi.park',
+            'elementType': 'geometry',
+            'stylers': [{
+                'color': '#def2d5'
             }]
         }, {
-            "featureType": "road",
-            "elementType": "geometry.stroke",
-            "stylers": [{
-                "visibility": "off"
+            'featureType': 'road',
+            'elementType': 'geometry.stroke',
+            'stylers': [{
+                'visibility': 'off'
             }]
         }, {
-            "featureType": "road",
-            "elementType": "labels",
-            "stylers": [{
-                "visibility": "on"
+            'featureType': 'road',
+            'elementType': 'labels',
+            'stylers': [{
+                'visibility': 'on'
             }]
         }, {
-            "featureType": "road",
-            "elementType": "labels.icon",
-            "stylers": [{
-                "visibility": "on"
+            'featureType': 'road',
+            'elementType': 'labels.icon',
+            'stylers': [{
+                'visibility': 'on'
             }]
         }, {
-            "featureType": "road.highway",
-            "elementType": "geometry.fill",
-            "stylers": [{
-                "color": "#ffe15f"
+            'featureType': 'road.highway',
+            'elementType': 'geometry.fill',
+            'stylers': [{
+                'color': '#ffe15f'
             }]
         }, {
-            "featureType": "road.highway",
-            "elementType": "geometry.stroke",
-            "stylers": [{
-                "color": "#efd151"
+            'featureType': 'road.highway',
+            'elementType': 'geometry.stroke',
+            'stylers': [{
+                'color': '#efd151'
             }]
         }, {
-            "featureType": "road.arterial",
-            "elementType": "geometry.fill",
-            "stylers": [{
-                "color": "#ffffff"
+            'featureType': 'road.arterial',
+            'elementType': 'geometry.fill',
+            'stylers': [{
+                'color': '#ffffff'
             }]
         }, {
-            "featureType": "road.local",
-            "elementType": "geometry.fill",
-            "stylers": [{
-                "color": "black"
+            'featureType': 'road.local',
+            'elementType': 'geometry.fill',
+            'stylers': [{
+                'color': 'black'
             }]
         }, {
-            "featureType": "transit.station.airport",
-            "elementType": "geometry.fill",
-            "stylers": [{
-                "color": "#cfb2db"
+            'featureType': 'transit.station.airport',
+            'elementType': 'geometry.fill',
+            'stylers': [{
+                'color': '#cfb2db'
             }]
         }, {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [{
-                "color": "#b1dafa"
+            'featureType': 'water',
+            'elementType': 'geometry',
+            'stylers': [{
+                'color': '#b1dafa'
             }]
         }];
-        var styledMap = new google.maps.StyledMapType(styles, { name: "Styled Map" });
+        var styledMap = new google.maps.StyledMapType(styles, { name: 'Styled Map' });
         var center = model.position.center;
 
         map = new google.maps.Map($('#map')[0], {
@@ -139,6 +142,7 @@
         });
     }
 
+    // Creates map's markers
     function createMarker(place, isNearByPlace) {
         var markerConfig = {
             map: map,
@@ -156,6 +160,7 @@
         return marker;
     }
 
+    // Creates marker's pin
     function makeMarkerIcon(isDefault) {
         var pinURL = 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=star|f381a7|FFFFFF';
         if (!isDefault) pinURL = 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.4|0|f381a7|14|_|%E2%80%A2';
@@ -168,20 +173,20 @@
         return markerImage;
     }
 
+    // Add events to a marker
     function addMarkerEvents(marker) {
         marker.addListener('click', function() {
             view.showInList(marker.placeID);
         });
         marker.addListener('mouseover', function() {
-            // this.setIcon(highlightedIcon);
             populateInfoWindow(this, largeInfowindow);
         });
         marker.addListener('mouseout', function() {
-            // this.setIcon(defaultIcon);
             largeInfowindow.close();
         });
     }
 
+    // Customizes the info wondow according to the marker's data
     function populateInfoWindow(marker, infowindow) {
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
@@ -195,26 +200,31 @@
         } else infowindow.open(map, marker);
     }
 
+    // Closes the info wondow
     function closeInfoWindow() {
         largeInfowindow.close();
     }
 
+    // Displays the info wondow
     function displayInfobox(marker) {
         populateInfoWindow(marker, largeInfowindow);
         map.panTo(marker.getPosition());
     }
 
+    // Switches the marker's icon
     function switchIcon(marker, isDefault) {
         marker.setVisible(false);
         if (isDefault) marker.setIcon(defaultIcon);
         else marker.setIcon(highlightedIcon);
     }
 
+    // Centers map
     function centerMap(center) {
         map.setCenter(center ? center : map.center)
         map.setZoom(10);
     }
 
+    // Displays markers to be shown on the map
     function displayMarkers(markersToHide, markersToShow) {
         closeInfoWindow();
 
@@ -234,6 +244,8 @@
 
     };
 
+    // Retrieves the string name of the user's current location
+    // Source: https://gist.github.com/AmirHossein/92a0597b5f723b19c648
     function getLocationFormattedString(point, callback) {
         var geocoder = new google.maps.Geocoder;
         geocoder.geocode({ 'location': point }, function(results, status) {
@@ -274,7 +286,7 @@
                         }
                     }
 
-                    callback(city + ", " + state + ", " + country, 'OK');
+                    callback(city + ', ' + state + ', ' + country, 'OK');
                 }
             } else {
                 callback(undefined, status);
@@ -283,6 +295,7 @@
 
     }
 
+    // Retrieves  the position of the user's current location
     function getCurrentCenter(modelCenter, callback) {
         var currentPosition = null;
         if (navigator.geolocation) {

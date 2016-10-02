@@ -2,6 +2,8 @@ var ViewModel = function() {
     var self = this;
 
     /* Methods */
+
+    // Initializes places
     self.initPlaces = function() {
         model.initialPlaces.forEach(
             function(place) {
@@ -10,6 +12,7 @@ var ViewModel = function() {
         );
     }
 
+    // Returnd IDs of places saved in the model
     self.getInitialPlacesIDs = function() {
         var placeIDs = [];
         model.initialPlaces.forEach(
@@ -19,8 +22,10 @@ var ViewModel = function() {
         return placeIDs;
     };
 
+    // Initiliazes a marker
     self.initMarker = function(place, isNearByPlace) {
         var marker = googleMap.createMarker(place, isNearByPlace);
+
         // Extending marker properties
         marker.address = place.address;
         marker.priceLevel = place.priceLevel ? place.priceLevel : null;
@@ -49,6 +54,7 @@ var ViewModel = function() {
         });
     };
 
+    // Retrieves the deatils of a place
     self.retrieveDetails = function(place, callback) {
         var detailsURL = 'https://api.foursquare.com/v2/venues/' + place.placeID;
         detailsURL += '?' + $.param({
@@ -102,8 +108,7 @@ var ViewModel = function() {
             self.initializedMarkerCount++;
             if (self.placeCount && self.placeCount === self.initializedMarkerCount) {
                 self.isDataReady(true);
-                //  self.errorMessage('Trouble trouble trouble');
-                if (!self.errorMessage()) $("#loader-wrapper").fadeOut("slow");
+                if (!self.errorMessage()) view.removeLoader();
             }
             callback();
         }).fail(function(err) {
@@ -111,18 +116,12 @@ var ViewModel = function() {
         });
     };
 
+    // Sorts places by attribute
     self.sortPlacesBy = function(index) {
         self.sortBy(self.sortOptions[index]);
     };
 
-    // self.showElement = function(elem) {
-    //     $(elem).hide().slideDown();
-    // };
-
-    // self.hideElement = function(elem) {
-    //     $(elem).slideUp(function() { $(elem).remove(); })
-    // };
-
+    // Adds places to favorite list
     self.addToFavorites = function(place) {
         self.nearList.remove(place);
         googleMap.switchIcon(place, true);
@@ -131,6 +130,7 @@ var ViewModel = function() {
         view.updateFavoriteCounter(place.title);
     };
 
+    // Removes places from favorite list
     self.removeFromFavorites = function(place) {
         self.favoriteList.remove(place);
         googleMap.switchIcon(place);
@@ -139,6 +139,7 @@ var ViewModel = function() {
         view.updateNearCounter(place.title);
     };
 
+    // Saves a place in the model
     self.savePlace = function(place) {
         var newPlace = {
             placeID: place.placeID,
@@ -156,6 +157,7 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
+    // Removes a place from the model
     self.removePlace = function(placeID) {
         model.initialPlaces = $.grep(model.initialPlaces, function(place) {
             return place.placeID.localeCompare(placeID) !== 0;
@@ -163,15 +165,19 @@ var ViewModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
+    // Updates model
     self.saveModel = function() {
         localStorage.favoritePlaces = JSON.stringify(model);
     };
 
+
+    // Triggers the view to initialize DOM elements that need to be initialized
     self.initViewElements = function(place) {
         view.initCardElems();
         googleMap.displayInfobox(place);
     };
 
+    // Updates map center in the model
     self.updateCenter = function() {
         model.position = {
             center: googleMap.currentCenter.center,
@@ -183,12 +189,13 @@ var ViewModel = function() {
         self.initApp(self);
     };
 
+    // Keeps the storaged center from the model
     self.keepCenter = function() {
         self.initApp(self);
     };
 
+    // Returns true when no places are found through the search
     self.showNotFound = function() {
-        //(searchString() && (filteredFavoriteList().length === 0 || filteredNearList().length === 0))
         if (self.searchString().length > 0) {
             if (self.isTab1Selected()) {
                 return (self.favoriteList().length > 0 && self.filteredFavoriteList().length === 0);
@@ -197,6 +204,7 @@ var ViewModel = function() {
         return false;
     };
 
+    // Hnadles AJAX errors
     self.errorHandling = function(message) {
         self.errorMessage(message);
         view.displayError(message);
@@ -271,7 +279,6 @@ var ViewModel = function() {
         });
 
         ko.computed(function() {
-            // self.isDataReady(false);
             var searchString = self.searchString().toLowerCase();
             var filteredArray = [];
             var diffArray = [];
@@ -314,13 +321,13 @@ var ViewModel = function() {
                 }
             }
             googleMap.displayMarkers(hideArray, showArray);
-            // self.isDataReady(true);
         });
     };
 };
 
-//helpers
+/* Helpers */
 
+// Sorts array based on attribute
 function sort(array, sortBy) {
     var trueValue = 1;
     if (['likes', 'rating'].indexOf(sortBy) > -1) trueValue = trueValue * -1;
@@ -331,10 +338,12 @@ function sort(array, sortBy) {
     }
 }
 
+// Waits for object to be loaded
+// Source: http://stackoverflow.com/questions/8618464/how-to-wait-for-another-js-to-load-to-proceed-operation
 function whenAvailable(name, callback) {
     var interval = 10; // ms
     window.setTimeout(function() {
-        if (window[name] && typeof window[name] !== "undefined") {
+        if (window[name] && typeof window[name] !== 'undefined') {
             callback();
         } else {
             window.setTimeout(arguments.callee, interval);
@@ -342,6 +351,8 @@ function whenAvailable(name, callback) {
     }, interval);
 }
 
+
+// Initialized the application
 function initApp(viewModel) {
     viewModel.initPlaces();
     viewModel.initComputed();
@@ -349,17 +360,18 @@ function initApp(viewModel) {
     view.init();
 }
 
+// Waits for map to be loaded
 $.getScript({
-        url: "https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap",
+        url: 'https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap',
         timeout: 5000 //3 second timeout
     })
     .done(function(script, textStatus) {
         console.log(textStatus);
-        whenAvailable("googleMap", function() {
+        whenAvailable('googleMap', function() {
             var viewModel = new ViewModel();
             ko.applyBindings(viewModel);
             if (!googleMap.currentCenter.inRatio) {
-                $('#modal1').openModal();
+                view.openModal();
                 viewModel.initApp = initApp;
             } else initApp(viewModel);
         });
