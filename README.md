@@ -8,7 +8,7 @@ This a single page application featuring locations of cupcake shops near you bui
 - In the project directory simply run `npm install` to install task runner's dependencies.
 - Run `grunt` or  `grunt -task-` as needed (available tasks: 'cssmin' and 'uglify').
 - Run a local server from the project directory (i.e. `python -m SimpleHTTPServer 8000`).
-- Navigate to `http://localhost:8000/` or ``http://localhost:8000/index.html`.
+- Navigate to `http://localhost:8000/` or `http://localhost:8000/index.html`.
 - Start using the application.
 
 ####Functionality
