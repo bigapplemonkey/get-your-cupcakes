@@ -27,6 +27,7 @@ var ViewModel = function() {
         var marker = googleMap.createMarker(place, isNearByPlace);
 
         // Extending marker properties
+        // TODO: Creating a custom Class to hold location/marker modal rather than overriding marker objects
         marker.address = place.address;
         marker.priceLevel = place.priceLevel ? place.priceLevel : null;
         marker.website = place.website;
@@ -204,10 +205,15 @@ var ViewModel = function() {
         return false;
     };
 
-    // Hnadles AJAX errors
+    // Handles Google map errors
+    self.googleError = function() {
+        self.errorHandling('We\'re currently experiencing connectivity issues with Google Map. Please try again later.');
+    };
+
+    // Handles AJAX errors
     self.errorHandling = function(message) {
-        self.errorMessage(message);
-        view.displayError(message);
+        self.errorMessage('<i class="material-icons error_icon">error_outline</i> ' + message);
+        view.stopLoader();
     };
 
     /* Static properties */
@@ -360,22 +366,13 @@ function initApp(viewModel) {
     view.init();
 }
 
-// Waits for map to be loaded
-$.getScript({
-        url: 'https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap',
-        timeout: 5000 //3 second timeout
-    })
-    .done(function(script, textStatus) {
-        console.log(textStatus);
-        whenAvailable('googleMap', function() {
-            var viewModel = new ViewModel();
-            ko.applyBindings(viewModel);
-            if (!googleMap.currentCenter.inRatio) {
-                view.openModal();
-                viewModel.initApp = initApp;
-            } else initApp(viewModel);
-        });
-    })
-    .fail(function(jqxhr, settings, exception) {
-        view.displayError('We\'re currently experiencing connectivity issues with Google Map. Please try again later.');
-    });
+var viewModel = new ViewModel();
+ko.applyBindings(viewModel, document.getElementById('errorMessage'));
+
+whenAvailable('googleMap', function() {
+    ko.applyBindings(viewModel);
+    if (!googleMap.currentCenter.inRatio) {
+        view.openModal();
+        viewModel.initApp = initApp;
+    } else initApp(viewModel);
+});

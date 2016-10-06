@@ -4,7 +4,10 @@
     var map,
         largeInfowindow,
         defaultIcon,
-        highlightedIcon;
+        highlightedIcon,
+        defaultIconBlue,
+        highlightedIconBlue,
+        activeMarker;
 
 
     // Map Initialization
@@ -124,6 +127,8 @@
 
         defaultIcon = makeMarkerIcon(true);
         highlightedIcon = makeMarkerIcon(false);
+        defaultIconBlue = makeMarkerIcon(true, true);
+        highlightedIconBlue = makeMarkerIcon(false, true);
 
         var googleMap = {
             createMarker: createMarker,
@@ -160,9 +165,11 @@
     }
 
     // Creates marker's pin
-    function makeMarkerIcon(isDefault) {
-        var pinURL = 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=star|f381a7|FFFFFF';
-        if (!isDefault) pinURL = 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.4|0|f381a7|14|_|%E2%80%A2';
+    function makeMarkerIcon(isDefault, isBlue) {
+        var color = 'f381a7';
+        if (isBlue) color = '64B5F6';
+        var pinURL = 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=star|' + color + '|FFFFFF';
+        if (!isDefault) pinURL = 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.4|0|' + color + '|14|_|%E2%80%A2';
         var markerImage = new google.maps.MarkerImage(
             pinURL,
             new google.maps.Size(21, 34),
@@ -172,10 +179,25 @@
         return markerImage;
     }
 
+    // Switches marker's icon color
+    function animateIcon(marker) {
+        if (activeMarker) {
+            if (activeMarker.icon.url.indexOf('star') < 0) {
+                activeMarker.setIcon(highlightedIcon);
+            } else activeMarker.setIcon(defaultIcon);
+        }
+        activeMarker = marker;
+        if (activeMarker.icon.url.indexOf('star') < 0) {
+            activeMarker.setIcon(highlightedIconBlue);
+        } else activeMarker.setIcon(defaultIconBlue);
+    }
+
     // Add events to a marker
     function addMarkerEvents(marker) {
         marker.addListener('click', function() {
+            animateIcon(marker);
             view.showInList(marker.placeID);
+
         });
         marker.addListener('mouseover', function() {
             populateInfoWindow(this, largeInfowindow);
@@ -206,6 +228,7 @@
 
     // Displays the info wondow
     function displayInfobox(marker) {
+        animateIcon(marker);
         populateInfoWindow(marker, largeInfowindow);
         map.panTo(marker.getPosition());
     }
@@ -226,6 +249,11 @@
     // Displays markers to be shown on the map
     function displayMarkers(markersToHide, markersToShow) {
         closeInfoWindow();
+        if (activeMarker) {
+            if (activeMarker.icon.url.indexOf('star') < 0) {
+                activeMarker.setIcon(highlightedIcon);
+            } else activeMarker.setIcon(defaultIcon);
+        }
 
         markersToHide.forEach(function(marker) {
             marker.setVisible(false);
@@ -288,7 +316,7 @@
                     callback(city + ', ' + state + ', ' + country, 'OK');
                 }
             } else {
-                callback(undefined, status);
+                viewModel.errorHandling('We\'re currently experiencing issues retrieving your location. Please try again later.');
             }
         });
 
@@ -324,9 +352,10 @@
                 });
 
             }, function() {
-                callback(undefined, 'ERROR');
+                viewModel.errorHandling('We\'re currently experiencing issues retrieving your location. Please try again later.');
             });
         } else {
+            // for this case, default model center will be used
             callback(undefined, 'NOT_SUPPORTED');
         }
     }

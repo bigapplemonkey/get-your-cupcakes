@@ -31,7 +31,7 @@ var view = {
 
             });
 
-            $(".dropdown-button").dropdown();
+            $('.dropdown-button').dropdown();
 
             $('ul.tabs').tabs({
                 onShow: function(elem) {
@@ -129,17 +129,18 @@ var view = {
         requestAnimationFrame(function() { $('input').blur(); });
     },
 
-    // Displays an error
-    displayError: function(errorMessage) {
+    // Stops the loader
+    stopLoader: function() {
         requestAnimationFrame(function() {
-            $('#errorMessage').html('<i class="material-icons error_icon">error_outline</i> ' + errorMessage);
             $('#preloader').fadeOut('slow');
         });
     },
 
     // Stops loader
     removeLoader: function() {
-        $('#loader-wrapper').fadeOut('slow');
+        requestAnimationFrame(function() {
+            $('#loader-wrapper').fadeOut('slow');
+        });
     },
 
     // Opens modal

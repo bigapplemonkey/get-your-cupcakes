@@ -1,3 +1,5 @@
+// TODO: Separate source code and distribution code into separate folders
+
 module.exports = function(grunt) {
     // Load the Grunt plugins.
     grunt.loadNpmTasks('grunt-contrib-uglify');

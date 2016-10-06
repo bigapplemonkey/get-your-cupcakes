@@ -13,13 +13,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
     <!--Import custom css-->
     <link rel="stylesheet" href="css/styles.min.css">
+    <link rel="icon" href="https://bigapplemonkey.github.io/get-your-cupcakes/favicon.ico?v=2">
     <script src="https://use.fontawesome.com/e01545ec6d.js"></script>
 </head>
 
 <body>
     <div id="loader-wrapper">
-        <!-- ko if: errorMessage -->
-        <div id="errorMessage" class="error_container"></div>
+        <!-- ko if: errorMessage().length > 0 -->
+        <div id="errorMessage" class="error_container" data-bind="html: errorMessage"></div>
         <!-- /ko -->
         <div id="preloader" class="preloader-wrapper big active">
             <div class="spinner-layer spinner-blue-only">
@@ -228,6 +229,7 @@
     <script src="js/view.min.js "></script>
     <script src="js/viewModel.min.js "></script>
     <script src="js/map.min.js "></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyADPmIYSbEP83lk3eqoZk0YBHdr8mkASHw&v=3&callback=initMap" onerror="viewModel.googleError()"></script>
 </body>
 
 </html>
